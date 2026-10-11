@@ -1,5 +1,9 @@
 # HANDOFF — 2026-10-11
-Repo CeLiCa-Sun/JAPAN-AUTO-TYCOON main; previous head 05cf3389.
-This turn added legacy backup compatibility in src/storage/atomic.ts: if no valid format-2 primary or generation backups, check prior slot:backup raw GameState, validate and return generation MAX. Added e2e/legacy-backup.spec.ts. Neither build nor unit nor browser test was run.
-Stage 0 is NOT PASSED. Obtain actual GitHub Actions push workflow job ID through Actions UI; connected job-log reader requires the job ID. Fix real TypeScript, Vitest and E2E failures, rerun all projects. Legacy backup behavior and capacity failures need cross-browser validation.
-Preserve end-of-turn checkbox multi-select and additional-request textarea. Never mark Stage 0 completed without verified test evidence.
+Repo CeLiCa-Sun/JAPAN-AUTO-TYCOON, main. Prior HEAD inspected 3d5385ff.
+User requested: Stage 0 CI verification, all-browser IndexedDB QA and real engine curve calibration.
+This turn source changes:
+- src/storage/atomic.ts: propagate IndexedDB read errors instead of silently treating them as missing backups; keep corrupt payload generation fallback.
+- e2e/storage-read-error.spec.ts: inject IDBObjectStore.get read failure; expect visible error.
+GitHub commits succeeded, but build/Vitest/Playwright NOT executed and push Actions run/job log not retrieved. Stage 0 MUST stay NOT PASSED.
+NEXT: obtain actual Actions push run and job IDs, download logs, repair identified errors; execute build, Vitest, all Playwright projects; test all storage edge cases. Validate matched physical engine specifications before fitting coefficients and claiming real-engine calibration.
+At the end include multi-select checkboxes and an additional-request textarea.
