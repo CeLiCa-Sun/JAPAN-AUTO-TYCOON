@@ -19,7 +19,6 @@ export function manufactureEngines(state:GameState,program:EngineProgram,command
  if(procured){
   // Do not silently use free legacy stock as if purchased. FIFO based on verified receipts.
   if(!state.production?.costLots?.length)throw new Error("Procurement-to-production cost transfer requires inventory provenance");
-  if(inspection.accepted===0)throw new Error("Rejected-only order requires scrap expense accounting");
   const lots=state.production.costLots.map(l=>({...l}));
   let materialValue=0;
   for(const req of plan.required){
@@ -37,22 +36,30 @@ export function manufactureEngines(state:GameState,program:EngineProgram,command
   const cost=materialValue+overhead;
   if(!Number.isSafeInteger(cost))throw new RangeError("Production cost overflow");
   if(financialSnapshot(state.journals,"player").cash<overhead)throw new Error("Insufficient cash");
-  const journal:JournalTransaction={id:"factory:"+commandId,companyId:"player",month:yearMonth(state.calendar),description:"Tracked engine production "+commandId,entries:[
+  // Cost is first accumulated in WIP, then allocated to accepted engines or scrap.
+  // Integer-yen rounding assigns the remainder to finished goods.
+  const scrapValue=Math.floor(cost*inspection.rejected/quantity);
+  const finishedValue=cost-scrapValue;
+  if(!Number.isSafeInteger(scrapValue)||!Number.isSafeInteger(finishedValue))throw new RangeError("Production valuation overflow");
+  const entries:JournalTransaction["entries"]=[
    {account:"workInProgress",debit:materialValue,credit:0},
    {account:"inventory",debit:0,credit:materialValue},
-   {account:"finishedGoods",debit:cost,credit:0},
-   {account:"workInProgress",debit:0,credit:materialValue},
-   {account:"cash",debit:0,credit:overhead}
-  ]};
+   ...(overhead>0?[{account:"workInProgress" as const,debit:overhead,credit:0},{account:"cash" as const,debit:0,credit:overhead}]:[]),
+   ...(finishedValue>0?[{account:"finishedGoods" as const,debit:finishedValue,credit:0}]:[]),
+   ...(scrapValue>0?[{account:"expense" as const,debit:scrapValue,credit:0}]:[]),
+   {account:"workInProgress",debit:0,credit:cost}
+  ];
+  const journal:JournalTransaction={id:"factory:"+commandId,companyId:"player",month:yearMonth(state.calendar),description:"Tracked engine production "+commandId,entries};
   const posted=dispatch(state,{id:commandId,kind:"PostJournal",journal}).state;
-  result={...posted,production:{materials:produced.stock,costLots:lots,completedOrders:[...(state.production?.completedOrders??[]),{orderId:commandId,programId:program.id,accepted:inspection.accepted,rejected:inspection.rejected,totalCostYen:cost}]}};
+  const finishedLots=[...(state.production?.finishedLots??[]),...(inspection.accepted>0?[{orderId:commandId,programId:program.id,remainingQuantity:inspection.accepted,remainingCostYen:finishedValue}]:[])];
+  result={...posted,production:{...state.production,materials:produced.stock,costLots:lots,finishedLots,completedOrders:[...(state.production?.completedOrders??[]),{orderId:commandId,programId:program.id,accepted:inspection.accepted,rejected:inspection.rejected,totalCostYen:cost}]}};
  }else{
   // Legacy demo stock was never paid for via procurement; preserve its existing accounting.
   const cashExpense=produced.costYen;
   if(financialSnapshot(state.journals,"player").cash<cashExpense)throw new Error("Insufficient cash");
   const journal:JournalTransaction={id:"factory:"+commandId,companyId:"player",month:yearMonth(state.calendar),description:"Engine work order "+commandId,entries:[{account:"inventory",debit:cashExpense,credit:0},{account:"cash",debit:0,credit:cashExpense}]};
   const posted=dispatch(state,{id:commandId,kind:"PostJournal",journal}).state;
-  result={...posted,production:{materials:produced.stock,completedOrders:[...(state.production?.completedOrders??[]),{orderId:commandId,programId:program.id,accepted:inspection.accepted,rejected:inspection.rejected,totalCostYen:produced.costYen}]}};
+  result={...posted,production:{...state.production,materials:produced.stock,completedOrders:[...(state.production?.completedOrders??[]),{orderId:commandId,programId:program.id,accepted:inspection.accepted,rejected:inspection.rejected,totalCostYen:produced.costYen}]}};
  }
  validateGameState(result);
  return result;
