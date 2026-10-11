@@ -1,12 +1,11 @@
 # HANDOFF — 2026-10-11
-Repo: CeLiCa-Sun/JAPAN-AUTO-TYCOON / main.
-Focused on A: CI/testing, without changing the already committed engine/finance core.
-Changes:
-- src/storage/atomic.ts: fix rotation when previous generations have gaps/corruption; delete stale generations in same IDB write transaction.
-- e2e/storage.spec.ts: actual-browser test definitions for corrupted SHA-256 primary and restore from generation 1, reload persistence (Chromium desktop and mobile projects).
-- docs/TEST_REPORT.md and IMPLEMENTATION_STATUS.md updated.
-Next required:
-1. Use GitHub Actions > CI on main to inspect push job build/Vitest/Playwright logs. Current connector supports PR-run lookup, not arbitrary push-run retrieval; do not assume zero checks means no CI.
-2. Fix any observed build/runtime issues using real logs. Commit exact fix and repeat until passing.
-3. Verify IndexedDB old saves, rotation with missing generations, tamper recovery and transaction abort in Chromium. Add Firefox/WebKit.
-4. Only then mark Stage 0 verified. Preserve schemaVersion 1 compatibility and full scope of MASTER_SPEC.
+Repository: CeLiCa-Sun/JAPAN-AUTO-TYCOON; main branch.
+Current task: CI and storage QA.
+Changes: e2e/migration-and-abort.spec.ts adds legacy schema V1->envelope format 2 and IDB aborted transaction coverage; CI workflow now includes workflow_dispatch, named steps and diagnostic upload.
+Do NOT rerun the previously committed modifications absent evidence of a defect.
+NEXT:
+1. Open GitHub Actions at https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions ; select latest CI main run or run workflow manually.
+2. Obtain run ID/job log, inspect build/TS/Vitest/Playwright results, fix exact failures and re-run.
+3. Test browser save rotations, corrupted primary, migration, transaction abort on Chromium desktop/mobile.
+4. Record observed counts and exact commit SHA in TEST_REPORT.md. Do not mark tests verified until actual success evidence.
+All prior specs and schemaVersion 1 backward reading retained.
