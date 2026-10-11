@@ -1,9 +1,6 @@
 # HANDOFF — 2026-10-11
-Repo CeLiCa-Sun/JAPAN-AUTO-TYCOON, main. Prior HEAD inspected 3d5385ff.
-User requested: Stage 0 CI verification, all-browser IndexedDB QA and real engine curve calibration.
-This turn source changes:
-- src/storage/atomic.ts: propagate IndexedDB read errors instead of silently treating them as missing backups; keep corrupt payload generation fallback.
-- e2e/storage-read-error.spec.ts: inject IDBObjectStore.get read failure; expect visible error.
-GitHub commits succeeded, but build/Vitest/Playwright NOT executed and push Actions run/job log not retrieved. Stage 0 MUST stay NOT PASSED.
-NEXT: obtain actual Actions push run and job IDs, download logs, repair identified errors; execute build, Vitest, all Playwright projects; test all storage edge cases. Validate matched physical engine specifications before fitting coefficients and claiming real-engine calibration.
-At the end include multi-select checkboxes and an additional-request textarea.
+Repo CeLiCa-Sun/JAPAN-AUTO-TYCOON main. Inspected prior commit 1958e03a.
+This turn: src/domains/engine/research.ts exposes thermalLossKw, estimatedCoolantLoadKw, frictionLossKw and estimatedFailureProbability. tests/engine-risk.test.ts checks bounds, time monotonicity, thermal allocation. All are heuristic preview outputs, not laboratory calibration.
+GitHub connector returned [] for commit statuses and PR-only runs. Web Actions page retrieval failed. No push run/job ID or actual log; no build/Vitest/Playwright executed.
+Stage 0 remains NOT PASSED. Next: obtain real push workflow run ID and job ID in GitHub Actions, fetch job logs, fix failures, rerun all projects, record SHA and actual passing tests. Run save scenarios on Chromium PC/mobile, Firefox, WebKit. Find condition-matched real dynamometer samples for empirical engineering fitting before claiming calibration.
+Keep end-of-response multiple-select checkboxes and extra request textarea.
