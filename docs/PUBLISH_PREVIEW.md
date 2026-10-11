@@ -1,6 +1,6 @@
 # JAPAN AUTO TYCOON — public playable preview release
 
-**Status (2026-10-11):** Pages publication attempt prepared and triggered by a workflow change; **no verified live URL until the Pages status and public asset smoke pass**. Never guess a URL.
+**Status (2026-10-11):** Tests/build/audit passed, but actual Pages publication **FAILED** in Actions run `38114576750` when `actions/configure-pages` received HTTP 404: no Pages site configured. There is **no verified live URL**. An administrator must first set `Settings > Pages > Source: GitHub Actions`; current workflow is **manual-only** with an early Pages preflight.
 
 ## Verified release prerequisites
 
@@ -11,7 +11,7 @@
 
 ## How publication works
 
-1. `.github/workflows/publish-preview.yml` runs once when that workflow file changes on main (explicit release attempt), and may also be invoked manually with `Actions > Publish playable preview > Run workflow`. Ordinary source or documentation commits **do not** deploy automatically.
+1. `.github/workflows/publish-preview.yml` is **manual-only** (`workflow_dispatch`) after the unsuccessful one-time release. The owner must deliberately invoke `Actions > Publish playable preview > Run workflow` once Pages is configured. Ordinary pushes do not publish.
 2. The release job requires **committed** `package-lock.json` and runs `npm ci`, blocking `npm audit --audit-level=moderate`, Pages-mode Vite build, Vitest, four-browser Playwright, and `dist` assertions.
 3. The Pages deployment step requires GitHub Pages configuration in **Settings > Pages > Build and deployment > Source: GitHub Actions**, and a plan eligible to host Pages from a private repository. The owner must enable these settings if not already configured.
 4. After deployment, Actions checks the live HTML title and fetches the live JavaScript asset. Its `JAPAN AUTO TYCOON / Pages` SHA status links to the actual published URL **only if deployment and those live network checks succeed**. Otherwise it reports failure and links to the Actions run.
