@@ -1,7 +1,7 @@
 # HANDOFF — 2026-10-11
-GitHub repo CeLiCa-Sun/JAPAN-AUTO-TYCOON, main. Prior head e3e8ea6c.
-Stage 0 may only be marked passed with actual successful build/Vitest/cross-browser E2E logs, which remain unavailable.
-Changes: src/domains/engine/reliability.ts now estimates coolant share separately from total rejected heat; tests/engine-thermal.test.ts added thermal and knock boundary tests. The 30% cooling share is only a placeholder, NOT measured.
-Next priority: identify actual GitHub Actions push run and job IDs in Actions UI; fetch logs, fix specific failure, rerun and document SHA/results.
-Then execute IndexedDB backup, corrupted primary/2 backups, transaction abort, simulated quota, legacy migration and manufacturing restore in Chromium desktop/mobile, Firefox, WebKit. Keep unverified statuses unchanged.
-Retain multiple-select checkbox options and extra-text input at the end of development reports.
+Repo CeLiCa-Sun/JAPAN-AUTO-TYCOON, main; prior head e169f973.
+User requires Stage 0 build/Vitest/cross-browser E2E passing proof; do not mark passed without actual logs.
+Added src/domains/engine/research.ts and tests/engine-research.test.ts for deterministic research preview, with explicit uncalibrated disclaimer. Manufacturing helper doc comment clarified that component sourcing is external.
+No actual CI push job logs or browser tests executed. Existing connector can retrieve job logs only with a real job ID; commit workflow listing is PR-only.
+Priority next: obtain actual Actions push run/job ID from GitHub UI, collect logs, fix errors and rerun; verify IndexedDB full cross-browser; use credible matched engine measured data before physical calibration.
+Keep end-of-response checkbox multi-select and additional-request text input.
