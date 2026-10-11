@@ -14,8 +14,12 @@ export function manufactureEngines(state:GameState,program:EngineProgram,command
  const plan=planEngineProduction(program,commandId,quantity,bom,stock);
  const inspection=inspectWorkOrder(plan,accepted,[]);
  const produced=commitProduction(plan,stock,inspection);
- if(financialSnapshot(state.journals,"player").cash<produced.costYen)throw new Error("Insufficient cash");
- const journal:JournalTransaction={id:"factory:"+commandId,companyId:"player",month:yearMonth(state.calendar),description:"Engine work order "+commandId,entries:[{account:"inventory",debit:produced.costYen,credit:0},{account:"cash",debit:0,credit:produced.costYen}]};
+ // Procurement receipts have already capitalized raw materials and recognized payables.
+ // Do not debit inventory for that material cost a second time.
+ const costAlreadyRecognized=state.journals.some(j=>j.id.startsWith("purchase:"));
+ const cashExpense=costAlreadyRecognized?plan.estimatedOverheadYen:produced.costYen;
+ if(financialSnapshot(state.journals,"player").cash<cashExpense)throw new Error("Insufficient cash");
+ const journal:JournalTransaction={id:"factory:"+commandId,companyId:"player",month:yearMonth(state.calendar),description:"Engine work order "+commandId,entries:[{account:"inventory",debit:cashExpense,credit:0},{account:"cash",debit:0,credit:cashExpense}]};
  const posted=dispatch(state,{id:commandId,kind:"PostJournal",journal}).state;
  const result:GameState={...posted,production:{materials:produced.stock,completedOrders:[...(state.production?.completedOrders??[]),{orderId:commandId,programId:program.id,accepted:inspection.accepted,rejected:inspection.rejected,totalCostYen:produced.costYen}]}};
  validateGameState(result);
