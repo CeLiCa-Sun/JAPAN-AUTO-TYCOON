@@ -1,5 +1,5 @@
 # IMPLEMENTATION STATUS — 2026-10-11
-- Stage 0: NOT PASSED; actual build/Vitest/Playwright success and Actions push run logs unavailable.
-- Save QA: 3-generation, corruption, legacy format, simulated quota, aborted transaction, read error and production restoration test sources exist, unverified in real cross-browser execution.
-- Engine calibration: RMSE kW and signed bias kW added to percentage errors; duplicate RPM rejected. Still no matched actual dyno curve and no fitted model.
-- Engine heat/friction/knock/longevity and factory production remain heuristic/prototype.
+- Stage 0 gate: NOT PASSED, actual TypeScript/Vite/Vitest/E2E pass evidence absent.
+- Save QA: checksum 3 generations, corruption/legacy/quota/abort/factory-recovery test sources committed; all browser execution unverified.
+- Engine: source-verified Robin EY20D engine geometry and published RPM torque/power data registered; two inconsistent rows flagged. Comparison fixture authored, no empirical coefficients fitted or verified. Thermodynamics, friction, knock and lifetime heuristic.
+- Manufacturing: optional persisted demo factory and ledger integration, no full factory/procurement.
