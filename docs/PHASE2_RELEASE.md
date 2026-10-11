@@ -26,3 +26,8 @@ GitHub接続が任意の `workflow_dispatch` 実行操作を持たないため�
 2. ページとJS取得に成功し、`<meta name="jat-release-sha">` が公開候補の完全SHAと一致する。
 3. Chromium PCとPixel 7相当モバイルエミュレーションの両方で、資金→仕入→製造→販売→買掛支払、再読込時の**自動**セーブ復元、月次自動保存、セーブ・ロード、スマホ価格候補を確認する。
 4. 実機（物理スマホ・PC）での手動確認は別途未実施として扱う。
+
+## 2026-10-11 追加検証
+- 公開候補SHA `4cffad1e30bf5f478e40f7d7f7f89487e07cee71` の[通常CI 38119727011](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38119727011) は **成功**。実ジョブログにより Vitest **88/88**、4ブラウザPlaywright **85件合格・3件スキップ**、npm audit **0件**、PagesビルドとSHAメタデータ検査の合格を確認。
+- [Pages公開 38119727017](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38119727017) は別実行。CI合格だけで公開済みと判断しない。公開テストの最後の合否は同実行の `verify-and-build` / `publish` のジョブと公開HTMLの完全SHA確認に従う。
+- 一時pushトリガーは削除済み。以後は GitHub Actions からの明示的な手動リリースだけが可能。
