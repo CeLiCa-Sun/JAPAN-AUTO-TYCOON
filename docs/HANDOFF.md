@@ -147,3 +147,19 @@ Continue to show multi-select checkboxes and additional-request textarea.
 - Local reproduction attempt: Node 22.16, npm 10.9; direct npm registry metadata request failed `EAI_AGAIN registry.npmjs.org`. No reliable current audit package names or dependency resolution available. **No vulnerable package updated or CVE marked fixed.**
 - The manual Pages publish workflow is deliberately blocked if current audit detects high or critical vulnerabilities. It will remain unpublished until CI/security checks pass, the user's Pages settings and plan allow publication, and they explicitly run it.
 - Next step at the stage boundary: inspect the SHA-specific `test` Actions job and uploaded `npm-audit-details`, remediate exact packages without forced incompatible upgrades, rerun whole CI, and only then manually enable GitHub Pages and verify a real live URL. Keep the user's final summary concise with 5 headings and multi-select checkboxes+textarea.
+
+## 2026-10-11 — security floors, SHA CI visibility, manual deployment
+
+### Implemented and committed
+- `package.json` now requires `vite ^7.3.7` and `vitest ^4.1.11`. These version floors were selected after inspecting published 2026 Vite and Vitest advisories, including Vitest `GHSA-82fw-gwwq-j7x9` (no 3.x patched release) and Vite high-severity 7.x filesystem issues. This is **a range update, not proof of an audited installed graph or CVE-free build**.
+- `.github/workflows/ci.yml` now shows `npm ls vite vitest @vitest/mocker`, saves package-level audit results, FAILS the job at the end when `npm audit --audit-level=moderate` reports vulnerabilities, and publishes `JAPAN AUTO TYCOON / CI` commit status on push as a best-effort way to query future results. Full build, Vitest and 4 Playwright projects remain part of the same run.
+- `.github/workflows/publish-preview.yml` retains **manual-only** Pages publication and now checks `npm audit --audit-level=moderate` before build, Vitest, 4-browser E2E and deploy. No workflow dispatch or actual Pages deployment was carried out. GitHub repository remains **private** and site settings/plan eligibility are unknown.
+- `docs/SECURITY_AUDIT.md` logs public advisory links, changed ranges and missing evidence. `docs/PUBLISH_PREVIEW.md` updated release gate and owner checklist.
+- Prior test files cover sale/reload, 4-browser E2E, market and save compatibility; this phase added a blocking security CI test and release validation, **not a new verified test run**.
+
+### Evidence and blockers
+- Historic Stage 0 run `38110349471` job `114384424640` is the only inspected successful full baseline (Vitest PASS, Playwright 56/56 PASS). Its npm install printed **3 vulnerabilities: 1 moderate, 2 critical**. Their specific package names were not in that captured install output.
+- The current repository has no committed `package-lock.json`; local npm registry DNS unavailable, so effective resolved package versions, `npm audit`, full build, latest Vitest and latest cross-browser E2E were **NOT executed in this session**.
+- GitHub connector combined status returned `statuses: []` for the latest observed head, and available SHA workflow lookup is PR-triggered-only. This does NOT prove a pushed Actions workflow passed or failed. Never mark latest SHA green until a real current job log and audit artifact are inspected.
+- GitHub Pages has **no verified publicly live game URL**; private repo Pages requires appropriate account plan and enabled Pages settings per GitHub Docs. Do not link guessed Pages URL.
+- Next action: obtain a real CI job log for the final SHA, inspect npm audit details, fix any advisory/transitive version or new Vitest-4 compatibility failures, create a true npm lockfile from resolved packages, rerun all test gates, then **owner explicitly triggers** manual Pages release and checks deployed game in browser.
