@@ -1,16 +1,13 @@
 # TEST REPORT — 2026-10-11
-## Evidence observed
-- Inspected previous main head ae205f1f9df5aed0ee2b3d9d324f8b2f98f71bdf.
-- GitHub source fetches and source commits succeeded.
-- Added backward-compatible optional production state, validation, engine work-order journal/inventory integration and three Vitest cases.
-## Tests NOT executed
-- npm install / npm run build (TypeScript+Vite) / npm test (Vitest).
-- npm run test:e2e (Chromium desktop/mobile, Firefox, WebKit).
-- IndexedDB save corruption, 3-generation recovery, legacy migration, quota simulation and transaction abort.
-## CI limitation
-- Previous GitHub commit status and PR-only run lookup do not provide main push job logs. No passing or failing CI job output was obtained. Do not mark tests passed or invent errors.
+## Confirmed GitHub writes
+- Reviewed prior main head d6d4660e and existing source before edits.
+- Added FactoryPanel UI and integrated it in main.tsx.
+- Added e2e/factory.spec.ts covering demo capitalization, single engine production, inventory decrement, save and reload.
+## Tests not confirmed
+- No verified npm install, TypeScript/Vite build, Vitest, Playwright desktop/mobile Chromium, Firefox or WebKit execution in this turn.
+- Existing generation backup, corruption, quota, transaction abort, old-schema migration tests still have no observed pass results.
+- No real Actions push job log was obtained; code committing does not prove quality gate passed.
 ## Stage 0 gate
-NOT PASSED. Source/test creation and valid GitHub commits do not demonstrate runtime correctness.
-## Caveats
-- Production state is optional to preserve schemaVersion 1 saves, and is returned immutably from production command. App UI does not yet initiate/commit factory work orders. saveAtomic can persist returned state, but this workflow has not been browser-tested.
-- Complete industrial simulation, integration with actual factory capacity/procurement and 100-year economy still pending.
+BLOCKED / NOT PASSED until successful build, unit tests, and actual E2E results with traceable run/job ID and commit SHA.
+## Cautions
+FactoryPanel is deliberately demo-only, not a full purchasing, factory scheduling or production-order system. Manufacture and ledger are updated together in a returned GameState and saved via saveAtomic, but real-world failure modes remain unverified.
