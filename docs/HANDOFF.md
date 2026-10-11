@@ -1,18 +1,14 @@
 # HANDOFF — 2026-10-11
-Repo: CeLiCa-Sun/JAPAN-AUTO-TYCOON / main.
-Input specification: JAPAN AUTO TYCOON Ver.1.0 (user upload).
-## Committed this turn
-- src/domains/engine/curve.ts: heuristic breathing curve.
-- src/app/EngineDesigner.tsx: editable engine preview/RPM SVG graph.
-- src/domains/finance/advanced.ts: loan origination, monthly interest estimate, depreciation journal, simplified P/L-B/S.
-- src/core/types.ts and finance/ledger.ts, finance/reports.ts: extend supported accounts.
-- src/storage/generations.ts: three generation rolling read/write scheme.
-- src/main.tsx and src/style.css: new UI and storage connection.
-- tests/advanced.test.ts and tests/longrun.test.ts: engineering/accounting and 1200-month calendar smoke.
-## Do next, in order
-1. Run npm install, npm run build, npm test and npm run test:e2e in actual runner; fix compiler/runtime errors. Only then mark gates verified.
-2. Strengthen backup with atomic generation writes, checksum envelopes, corruption tests and version migrations.
-3. Finance complete loan repayment/interest settlement, depreciation schedules, fixed asset purchase, genuine three-statement accounting and actual cash flow classification.
-4. Calibrate RPM performance against measured reference engines; model compression ratio, thermal/friction/knock/heat and give uncertainty bounds.
-5. Convert calendar-only 1200 month smoke to production simulation with actual factories/NPCs/markets.
-Avoid presenting existing placeholder UI as finished game; maintain prior save format support.
+Repository CeLiCa-Sun/JAPAN-AUTO-TYCOON, branch main.
+Recent commits:
+- engine/calculation.ts: heuristic compression, friction, pumping and knock modifiers.
+- finance/lifecycle.ts and tests/lifecycle.test.ts: loan installments, capital purchases, integer depreciation.
+- storage/atomic.ts: SHA-256 save envelope; atomic IDB rotation across three entries; detects corrupt envelope, reads legacy primary slot.
+- main.tsx: connects UI save and load to atomic storage.
+Critical next:
+1. Obtain push CI logs and run npm build/Vitest/Playwright; repair any failure before calling any stage verified.
+2. Save recovery tests in browser: primary corrupt/missing, generation valid, interruption/abort, old schema v1.
+3. Add real structured account period and cash-flow journal, enforce business invariants at command boundary; avoid confusing standalone finance helper calls with posted transactions.
+4. Calibrate engine predictions to dyno samples and implement thermal/knock/durability estimation with model version and uncertainty envelope.
+5. Replace calendar-only 1200-month smoke with economy/market/production/NPC simulations.
+No quality gate should be marked passed without test evidence.
