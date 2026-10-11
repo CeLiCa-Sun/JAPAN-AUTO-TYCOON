@@ -21,6 +21,22 @@ export function validateGameState(value: unknown): asserts value is GameState {
    const receiptIds=new Set<string>();
    for(const lot of p.costLots){if(!lot||typeof lot.receiptId!=="string"||!lot.receiptId||receiptIds.has(lot.receiptId)||typeof lot.partId!=="string"||!lot.partId||!Number.isSafeInteger(lot.quantity)||lot.quantity<0||!Number.isSafeInteger(lot.unitCostYen)||lot.unitCostYen<=0||!Number.isSafeInteger(lot.quantity*lot.unitCostYen))throw new Error("Invalid cost lot");receiptIds.add(lot.receiptId);}
   }
+  if(p.purchaseOrders!==undefined){
+   if(!Array.isArray(p.purchaseOrders))throw new Error("Invalid purchase orders");
+   const orderIds=new Set<string>();
+   for(const o of p.purchaseOrders){
+    if(!o||typeof o.id!=="string"||!o.id||orderIds.has(o.id)||typeof o.supplierId!=="string"||!o.supplierId||typeof o.partId!=="string"||!o.partId||![o.quantity,o.unitPriceYen,o.orderedYear,o.orderedMonth,o.dueYear,o.dueMonth,o.receivedQuantity].every(Number.isSafeInteger)||o.quantity<1||o.unitPriceYen<1||o.receivedQuantity<0||o.receivedQuantity>o.quantity||o.orderedYear<1||o.dueYear<1||o.orderedMonth<1||o.orderedMonth>12||o.dueMonth<1||o.dueMonth>12||!Number.isSafeInteger(o.quantity*o.unitPriceYen))throw new Error("Invalid purchase order");
+    orderIds.add(o.id);
+   }
+  }
+  if(p.finishedLots!==undefined){
+   if(!Array.isArray(p.finishedLots))throw new Error("Invalid finished lots");
+   const finishedIds=new Set<string>();
+   for(const l of p.finishedLots){
+    if(!l||typeof l.orderId!=="string"||!l.orderId||finishedIds.has(l.orderId)||typeof l.programId!=="string"||!l.programId||!Number.isSafeInteger(l.remainingQuantity)||l.remainingQuantity<0||!Number.isSafeInteger(l.remainingCostYen)||l.remainingCostYen<0||(l.remainingQuantity===0&&l.remainingCostYen!==0))throw new Error("Invalid finished lot");
+    finishedIds.add(l.orderId);
+   }
+  }
   const ids=new Set<string>();
   for(const o of p.completedOrders){if(!o||typeof o.orderId!=="string"||!o.orderId||ids.has(o.orderId)||typeof o.programId!=="string"||!o.programId||![o.accepted,o.rejected,o.totalCostYen].every(x=>Number.isSafeInteger(x)&&x>=0))throw new Error("Invalid production order");ids.add(o.orderId);}
  }
