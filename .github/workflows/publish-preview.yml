@@ -1,10 +1,8 @@
 name: Publish playable preview
 
-# One-time owner-requested publish attempt on this workflow change; ordinary commits do NOT redeploy.
+# Deployment is explicitly owner-initiated after Pages has been enabled in Settings.
+# The previous push-triggered release failed when the repository had no Pages site.
 on:
-  push:
-    branches: [main]
-    paths: ['.github/workflows/publish-preview.yml']
   workflow_dispatch:
 
 permissions:
@@ -18,7 +16,29 @@ jobs:
   verify-and-build:
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    permissions:
+      contents: read
+      pages: read
     steps:
+      - name: Require GitHub Pages to be enabled from Actions
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              const response = await github.rest.repos.getPages({
+                owner: context.repo.owner,
+                repo: context.repo.repo
+              });
+              if (response.data.build_type !== 'workflow') {
+                core.setFailed('Pages is not using GitHub Actions. Open Settings > Pages > Build and deployment > Source: GitHub Actions.');
+              }
+            } catch (error) {
+              if (error.status === 404) {
+                core.setFailed('GitHub Pages has not been enabled. Repository admin: open Settings > Pages, select GitHub Actions as the deployment source, and verify private-repository plan eligibility.');
+              } else {
+                throw error;
+              }
+            }
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
