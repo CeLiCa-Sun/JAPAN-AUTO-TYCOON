@@ -16,3 +16,10 @@
 - Stage 0 NOT PASSED; a new run for the corrected SHA is necessary.
 - npm install previously noted 1 moderate and 2 critical advisories; package identification requires npm audit, not yet obtained.
 - Robin EY20D still uses single-scalar preview calibration, not validated physical coefficients.
+
+## Verified Stage 0 CI PASS — 2026-10-11
+- CI run: https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38110349471/job/114384424640
+- Job 114384424640: Build TypeScript + Vite SUCCESS; Vitest SUCCESS; Playwright SUCCESS — 56/56 across Chromium desktop/mobile, Firefox and WebKit. All steps verified from real Actions job logs.
+- Stage 0 required CI gate: PASSED for this tested revision. This does not prove physical device quota exhaustion, production-grade security, or an empirically calibrated engine.
+- npm dependency audit remains OPEN: installation warning indicates 1 moderate and 2 critical vulnerabilities, but no package-level npm audit output has been captured. Do not claim remediated.
+- Robin EY20D fitted scalar is a preview and separate source condition assessment remains OPEN.
