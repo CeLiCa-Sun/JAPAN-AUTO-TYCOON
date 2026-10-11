@@ -6,7 +6,7 @@ import {financialSnapshot} from "../domains/finance/reports";
 import {DEFAULT_ENGINE} from "../domains/engine/calculation";
 import {manufactureEngines} from "../domains/engine/persistentProduction";
 import {createPurchaseOrder,placePurchaseOrder,receivePurchasedParts,paySupplier} from "../domains/procurement/purchasing";
-import {sellFinishedEngines} from "../domains/finance/finishedGoods";
+import {sellEnginesIntoMarket} from "../domains/market/marketSales";
 import {estimateEngineMarket,REFERENCE_PRICE_YEN} from "../domains/market/engineMarket";
 import {saveAtomic} from "../storage/atomic";
 
@@ -30,7 +30,7 @@ export function BusinessCyclePanel({game,onSaved,slot}:{game:GameState;onSaved:(
  const available=game.production?.materials??[];
  const salePriceValid=Number.isSafeInteger(unitSalePrice)&&unitSalePrice>0;
  const market=salePriceValid?estimateEngineMarket(game,unitSalePrice,finished[0]?.remainingQuantity??0):null;
- const nextAction=!game.journals.length?"1. 新規経営デモ開始":!game.production?.costLots?.some(l=>l.quantity>0)&&!finished.length?"2. 部品を発注・納入":finished.length?"4. 完成品を販売":(available.find(m=>m.partId==="block")?.quantity??0)>0?"3. エンジン製造":"2. 部品を発注・納入";
+ const nextAction=!game.journals.length?"1. 新規経営デモ開始":finished.length?"4. 完成品を販売":(available.find(m=>m.partId==="block")?.quantity??0)>0?"3. エンジン製造":finance.payable>0?"5. 仕入代金を支払う":"2. 部品を発注・納入";
  const apply=async(action:()=>GameState,success:string)=>{
   if(busy)return;
   setBusy(true);
@@ -71,7 +71,7 @@ export function BusinessCyclePanel({game,onSaved,slot}:{game:GameState;onSaved:(
   if(!Number.isSafeInteger(unitSalePrice)||unitSalePrice<1)throw new RangeError("販売単価は正の整数で入力してください");
   const lot=finished[0];if(!lot)throw new Error("販売可能な完成品がありません");
   if(!market||market.sellable<1)throw new Error("その価格では購入需要がありません。販売価格を見直してください。");
-  return sellFinishedEngines(game,lot.orderId,market.sellable,unitSalePrice,"ui:sale:"+game.revision);
+  return sellEnginesIntoMarket(game,lot.orderId,unitSalePrice,"ui:sale:"+game.revision);
  },"需要内で完成品を販売し、売上・売上原価を計上しました");
  const pay=()=>apply(()=>{
   if(finance.payable<=0)throw new Error("未払の買掛金がありません");
@@ -105,7 +105,7 @@ export function BusinessCyclePanel({game,onSaved,slot}:{game:GameState;onSaved:(
   <label>販売単価（円／基） <input type="number" min="1" step="1000" value={unitSalePrice} onChange={e=>setUnitSalePrice(Number(e.target.value))}/></label>
   <div aria-label="市場需要の試算">
    <h3>販売市場（簡易需要モデル）</h3>
-   <p>競合の参考価格：{yen(REFERENCE_PRICE_YEN)} ／ 想定購入需要：{market?.maxBuyers??"-"}基 ／ 今回販売見込：{market?.sellable??"-"}基 ／ 売れ残り：{market?.unsold??"-"}基</p>
+   <p>競合の参考価格：{yen(REFERENCE_PRICE_YEN)} ／ 想定購入需要：{market?.maxBuyers??"-"}基 ／ 月内残需要：{market?.remainingBuyers??"-"}基 ／ 今回販売見込：{market?.sellable??"-"}基 ／ 売れ残り：{market?.unsold??"-"}基</p>
    <p>見込売上：{yen(market?.estimatedRevenueYen??0)}。価格が高いほど需要が減少します。</p>
   </div>
   <div className="actions">
