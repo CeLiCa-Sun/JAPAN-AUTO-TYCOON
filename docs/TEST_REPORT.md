@@ -1,17 +1,17 @@
-# TEST REPORT — 2026-10-11
-## Confirmed
-- GitHub connector accepted source changes and commit responses.
-- Existing files were inspected before modification.
-- Test sources committed: unit engine/finance, validation, JSON interchange, 1200-month calendar smoke, Chromium desktop/mobile browser smoke.
-
-## Not confirmed
-- No npm installation, TypeScript compilation, Vitest execution or Playwright browser execution has been completed in this Chat turn.
-- No passing CI workflow or browser execution is proven.
-- The 1200-month test exercises deterministic calendar state only. It is NOT a 100-year economic, industrial or NPC endurance test.
-- Backup restoration and generation rotation lack browser-level execution confirmation.
-- Engine estimates have no recorded empirical calibration or error bounds.
-
-## Open risks
-- CI run may need fixes once logs are obtained.
-- Multi-key IndexedDB generation writes are not atomic.
-- Files may need validation and migration before a release candidate.
+# TEST REPORT — 2026-10-11 (latest)
+## Source verification
+- GitHub fetches of existing code succeeded before changes.
+- Source commits succeeded for engine heuristics, finance lifecycle, checksum save, and main UI wiring.
+- GitHub combined status on previous head reported zero statuses. That does not prove Actions did not run.
+## Executed tests
+- No npm install, TypeScript build, Vitest or Playwright execution was performed in this chat.
+- No CI pass is confirmed. All newly written code and tests are **UNVERIFIED**.
+## Tests included
+- Existing desktop/mobile Chromium smoke cases.
+- Existing 1200-month deterministic calendar-only smoke test (not an economic long-run simulation).
+- tests/lifecycle.test.ts: loan repayment, insufficient cash, fixed-asset purchase, exact-total depreciation.
+## Outstanding
+- Confirm CI push logs through GitHub Actions UI and fix observed errors.
+- Execute browser tests including legacy-save migration and damaged checksum recovery.
+- Test multi-generation IndexedDB transaction atomicity under abort/failure.
+- Verify 1200+ month economics once production/manufacturing/market/NPC modules exist.
