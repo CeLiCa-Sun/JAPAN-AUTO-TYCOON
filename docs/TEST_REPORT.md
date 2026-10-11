@@ -1,14 +1,16 @@
-# TEST REPORT — 2026-10-11 (CI verification pass)
-## Confirmed by GitHub connector
-- Current source, workflow and test files retrieved from main.
-- Save generation rotation fix committed: valid older generations are retained even when primary corrupted; stale generations are deleted during atomic transaction.
-- e2e/storage.spec.ts committed: Chromium desktop/mobile recovery from tampered SHA-256 envelope and save/load after page reload.
-## Execution evidence
-- GitHub combined status API returned no commit statuses for the prior head.
-- The available workflow-run lookup only returns PR-triggered runs, so its empty output cannot establish whether push workflows have run.
-- Actual npm installation, TypeScript compilation, Vitest, and Playwright runs are NOT executed/verified here. No passing build or test claimed.
-## Next actions
-- Obtain actual GitHub Actions push run logs, fix failing steps, rerun.
-- Test corrupt primary and valid older generation rotation (not just load).
-- Test IDB abort and schema 1 migration.
-- Preserve 1200-month calendar test distinction from full economic endurance.
+# TEST REPORT — 2026-10-11
+## Verified GitHub operations
+- Reviewed main branch source and latest commits.
+- Committed e2e/migration-and-abort.spec.ts (legacy save migration and transaction abort test cases).
+- Updated .github/workflows/ci.yml: workflow_dispatch, named build/unit/E2E steps and on-failure Playwright diagnostics.
+## CI execution evidence
+- Prior main commit 62202fbb: combined GitHub commit statuses returned [].
+- PR-only workflow run lookup returned []; this does NOT query push workflow runs.
+- Actual GitHub Actions push run IDs and job logs were unavailable using these lookups.
+- Build, Vitest, desktop/mobile Chromium Playwright, recovery tests: **not verified as executed**. No pass claim.
+## Test coverage status
+- Added browser scenarios: tampered hash fallback, reload persistence, legacy V1 save read / format 2 rewrite, transaction abort retains prior record.
+- Browser tests must still be executed on Actions or local runner.
+- 1200-month test remains only a calendar determinism smoke check, not a 100-year economy simulation.
+## Required
+Collect exact run/job IDs and logs from Actions, fix any failures, and update this report with test counts, runtime and commit SHA before promoting quality gates.
