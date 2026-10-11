@@ -52,6 +52,8 @@ jobs:
       - name: Verify Pages-mode bundle and repository subpath
         run: |
           npm run build -- --mode pages
+          node scripts/stamp-pages-release.mjs "$GITHUB_SHA"
+          grep -Fq "name=\"jat-release-sha\" content=\"${GITHUB_SHA}\"" dist/index.html
           node --input-type=module <<'NODE'
           import {readFileSync,statSync} from 'node:fs';
           const html=readFileSync('dist/index.html','utf8');
