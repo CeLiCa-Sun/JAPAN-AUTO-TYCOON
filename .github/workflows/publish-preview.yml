@@ -1,0 +1,59 @@
+name: Publish playable preview (manual)
+
+# Publication is deliberately opt-in and never happens on push or pull_request.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-playable-preview
+  cancel-in-progress: false
+
+jobs:
+  verify-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install
+      - name: Block publication if high or critical advisories are present
+        run: npm audit --audit-level=high
+      - name: Build for GitHub Pages repository path
+        run: npm run build -- --mode pages
+      - name: Unit tests
+        run: npm test
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Full PC/mobile browser smoke and regression tests
+        run: npm run test:e2e
+      - name: Verify built output
+        run: |
+          test -s dist/index.html
+          test -d dist/assets
+          grep -q '/JAPAN-AUTO-TYCOON/assets/' dist/index.html
+      - name: Upload Pages site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  publish:
+    needs: verify-and-build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Publish approved preview
+        id: deployment
+        uses: actions/deploy-pages@v4
