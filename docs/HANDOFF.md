@@ -1,11 +1,7 @@
 # HANDOFF — 2026-10-11
 Repo CeLiCa-Sun/JAPAN-AUTO-TYCOON / main.
-Added src/domains/engine/settlement.ts and tests/engine-settlement.test.ts: prototype testing gates a limited cash/expense journal settlement; prevents duplicate settlement IDs and insufficient funds using existing reducer.
-This is NOT a finished factory production or inventory transaction lifecycle.
-Existing CI, storage E2E, calibration and engineering preview unchanged.
-Next:
-1. Obtain a concrete GitHub Actions main branch push CI run/job ID from Actions UI; then use connected job-log tools to inspect actual failures.
-2. Run all tests in CI and fix errors evidenced by output, especially browser and TypeScript checks.
-3. Validate storage all-platform tests including quota/error and legacy migration.
-4. Obtain properly documented real dyno curve and matching engine specification, then compare using calibration harness.
-5. Model true engine BOM, order, goods receipt and inventory ledger before declaring manufacturing integrated.
+User requires Stage 0 to pass before completion. This has not been proven; NEVER mark green without real logs.
+Latest previous head inspected e3969619. Statuses and PR-only runs empty; this does not establish push run results.
+New: src/domains/engine/manufacturing.ts and tests/manufacturing.test.ts, immutable BOM inventory inspection helpers.
+Next: obtain actual push CI run/job ID via GitHub Actions UI; fetch job logs using connected job-log tool; repair TypeScript, unit and desktop/mobile browser failures; rerun. Record counts and exact commit SHA in TEST_REPORT.
+Then integrate company inventory, factory production and balanced journals into persistent state with save migration. Maintain user-requested multiple-choice controls AND an additional-request textbox at end of every development response.
