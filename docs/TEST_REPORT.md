@@ -1,15 +1,16 @@
 # TEST REPORT — 2026-10-11
-## Confirmed GitHub changes
-- Inspected previous main head 3d5385ff25bcba426af7692ae2af18c2f9b40114.
-- Fix: IndexedDB read request errors in recoverAtomic are no longer swallowed as if the slot was empty. Corrupt contents still fall back through valid generations and legacy backup.
-- Added e2e/storage-read-error.spec.ts to simulate a read failure and assert visible error instead of an absent-save message.
-## CI lookup and actual execution
-- Combined commit statuses: [].
-- Commit workflow runs: [] from PR-filtered GitHub connector; push run details remain unknown.
-- Browser-accessible Actions page request failed; no actual Actions run/job logs obtained.
-- npm build: NOT RUN; Vitest: NOT RUN; Chromium desktop/mobile, Firefox, WebKit Playwright: NOT RUN.
-- Existing save corruption, 3-generation, quota, abort, legacy migration, production restoration tests remain unverified.
-## Stage 0 gate
-**NOT PASSED**. Green build, Vitest and cross-browser E2E evidence is mandatory. No green inference from successful GitHub commits.
-## Engine calibration
-No new confirmed empirical dynamometer evidence or tuning this turn. Existing heat, knock, friction and lifetime estimates are uncalibrated previews.
+## Confirmed
+- Inspected main prior commit 1958e03a9c65dbca64bc2a94efa0f458dd73ac7a and research/save implementations.
+- GitHub commit status lookup returned []; PR-filtered workflow lookup returned []. Public Actions page fetch failed. These do not prove passing/failing CI.
+- Added provisional thermal/friction/estimated failure risk research metrics plus engine-risk unit tests, committed to GitHub.
+## Actual execution
+- TypeScript/Vite build: NOT EXECUTED.
+- Vitest: NOT EXECUTED.
+- Playwright Chromium desktop/mobile, Firefox, WebKit: NOT EXECUTED.
+- IndexedDB 3-generation, corrupt primary, historical legacy, quota, abort, read-failure and factory restore: test cases exist; NOT EXECUTED.
+## Engineering validity
+- Failure probability is a simple exponential exposure model based on heuristic estimated life; NOT empirically fitted.
+- Coolant heat is assumed 30% of fuel energy not converted into shaft output. It is NOT a validated radiator demand.
+- No matched real engine dynamometer curve was obtained/used; no calibration claims.
+## Stage 0 quality gate
+NOT PASSED. Requires observed successful build, Vitest and all Playwright browser projects tied to exact commit SHA.
