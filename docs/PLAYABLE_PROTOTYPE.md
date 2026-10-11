@@ -1,6 +1,6 @@
 # JAPAN AUTO TYCOON — プレイ試作ガイド (2026-10-11)
 
-> Status: the playable prototype code at tested SHA **344bf28f** passed CI run **38114679080**: build, Vitest 86/86, four-browser E2E 76/76, npm audit 0. Later workflow/documentation commits require their own checks. Public GitHub Pages deployment failed due to missing site settings; no live URL yet.
+> **公開済みのプレイ試作版:** https://celica-sun.github.io/JAPAN-AUTO-TYCOON/ （公開SHA `fcdb05a39479184cbb7687d970ed18a9ce78059f`）。[Pages実行 38117402371](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38117402371) でビルド、Vitest 86/86、4ブラウザE2E 76/76、npm監査0件、公開先HTML・JS、実サイトでのChromium PC/スマホ相当E2E 2/2合格を確認。スマホはエミュレーションであり実機ではありません。完成版ではありません。
 
 ## Start locally
 1. Install Node.js 22 and use `npm ci` (lockfile committed and audited).
@@ -27,13 +27,17 @@
 - Prices and demand are scenario parameters, not real historical car sales or economy estimates.
 - Existing `FactoryPanel` is an independent legacy demo. Its seeded inventory cannot be mixed into the new procured-cost flow.
 
-## Acceptance checklist for the phase boundary
-- [ ] `npm run build` passes (TypeScript and Vite).
-- [ ] `npm test` passes including `market-demand` and `market-monthly-sales`.
-- [ ] `npm run test:e2e` passes on Chromium desktop/mobile, Firefox, and WebKit.
-- [ ] `npm audit` package-level findings reviewed; `npm-audit-details` artifact inspected and safe updates tested.
-- [ ] All failures from **the exact new commit** repaired and rechecked in GitHub Actions.
-- [ ] Stage 0 passed historically on run 38110349471/job 114384424640, but current milestone has no verified pass until a newer run is observed.
+## 公開試作版の検証記録（2026-10-11）
+- [x] 公開SHA `fcdb05a39479184cbb7687d970ed18a9ce78059f` の TypeScript/Vite Pages ビルド成功
+- [x] Vitest **86/86** 成功
+- [x] Chromium desktop/mobile、Firefox、WebKitの E2E **76/76** 成功
+- [x] `npm audit --audit-level=moderate` で脆弱性 **0件**
+- [x] Pages の公開HTML・JavaScript取得、配布コミットSHA照合成功
+- [x] 公開HTTPSサイト上のChromium desktop・Pixel 7相当エミュレーションで、仕入→製造→販売→決済→再読込とセーブ復元 **2/2** 成功
+- [ ] 物理的なPC・iPhone・Androidでの手動実機確認
+- [ ] 正式版の18工程・NPC経営・経済長期バランス検証
+
+最新の裏付けは [RELEASE_VERIFICATION.md](RELEASE_VERIFICATION.md)。`main` の後続コミットは再公開するまで実際の公開版には反映されません。
 
 ## Latest verified CI milestone
 - [38114198670](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38114198670): build PASS, 86/86 unit PASS, 76/76 desktop/mobile E2E PASS, npm audit 0 findings.
