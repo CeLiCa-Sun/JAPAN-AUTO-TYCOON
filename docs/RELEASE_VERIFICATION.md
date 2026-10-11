@@ -1,48 +1,53 @@
-# JAPAN AUTO TYCOON — verified playable preview release
+# JAPAN AUTO TYCOON — 最新公開版の検証記録
 
-**Release date:** 2026-10-11
-**Status:** PUBLIC PREVIEW DEPLOYED AND VERIFIED IN CI. Not a completed game.
+**確認日:** 2026-10-11
+**状態:** Phase 2 プレイ試作版を公開済み・GitHub Actionsによる公開サイト受入テスト合格（正式完成版ではありません）
 
-## Playable URL
-https://celica-sun.github.io/JAPAN-AUTO-TYCOON/
+## 公開URL・正確な公開ソース
 
-**Deployed commit:** `fcdb05a39479184cbb7687d970ed18a9ce78059f`
-**Release workflow run:** https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38117402371
-**Verified GitHub Pages status:** `JAPAN AUTO TYCOON / Pages` = `success` on deployed commit, target URL as above.
+- **プレイ:** https://celica-sun.github.io/JAPAN-AUTO-TYCOON/
+- **配布済みの完全SHA:** `4cffad1e30bf5f478e40f7d7f7f89487e07cee71`
+- **Pagesデプロイ実行:** https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38119727017
+- **実行イベント:** `push`（Phase 2 を一度だけ公開するための一時的トリガー）。実行成功後、公開ワークフローは `workflow_dispatch` **手動専用へ復元**。
+- **根拠:** 公開対象のSHA `4cffad1e…` に付いた `JAPAN AUTO TYCOON / Pages = success` ステータスの公開URL、および実際のActionsジョブログ。
 
-## Independently inspected GitHub Actions evidence
+## 公開ビルドのテスト証拠
 
-### verify-and-build job `114404945279`
-- GitHub Pages setting/API preflight: SUCCESS (previous missing-site 404 has been resolved).
-- Locked Node 22 `npm ci`: SUCCESS.
-- `npm audit --audit-level=moderate`: **0 vulnerabilities** at release time.
-- Vite build in Pages mode: SUCCESS.
-- Injected HTML `jat-release-sha` marker for **fcdb05a...**, matches release SHA.
-- Vitest: 28 files, **86/86 tests passed**.
-- Local Playwright E2E: **76/76 passed**, Chromium desktop, Chromium mobile emulation, Firefox, WebKit.
-- Pages artifact upload: SUCCESS, ID `11694471218`.
+### verify-and-build — job 114411780252 / PASS
+- GitHub Pages設定チェック・Node 22の`npm ci`・TypeScript/Vite Pages-mode ビルド：合格
+- `npm audit --audit-level=moderate`：**0件**
+- Vitest：**29ファイル、88/88件合格**
+- Playwright：**85件合格、3件スキップ、0件失敗**（Chromiumデスクトップ、Chromiumスマホ相当、Firefox、WebKit）
+- `dist/index.html` 内の `jat-release-sha` が完全公開SHAと一致。Pagesアップロード成功。
 
-### publish job `114405308261`
-- `actions/configure-pages`: SUCCESS.
-- `actions/deploy-pages`: SUCCESS.
-- Real hosted HTML fetched via `curl --fail`: SUCCESS.
-- HTML release SHA matches the deployed commit: SUCCESS.
-- Hosted primary JavaScript asset fetched: SUCCESS.
-- Playwright **2/2 passed** on the actual HTTPS Pages URL:
-  - Desktop Chromium
-  - Pixel 7-style mobile Chromium emulation
-- Live test covers site load, start capital, supplier purchase, manufacture, market sale, payable settlement, refresh, IndexedDB save load, month advancement, manual save, and refresh/restore.
-- Pages SHA-specific status was recorded as **success** and linked to the deployed URL.
-- The browser-based acceptance is **device emulation**, not physical iPhone/Android or a user-operated PC test. The live site was additionally reachable to GitHub-hosted test runners. A separate web-inspection client was unable to retrieve the page; this is not evidence of an outage after the successful live runner tests.
+### publish — job 114414636964 / PASS
+- `actions/configure-pages`、`actions/deploy-pages`：成功
+- **実際の公開HTTPS URL**のHTMLを`curl --fail`で取得し、HTMLの完全SHAを照合：成功
+- 実際の公開サイトが読み込むJavaScriptアセットを取得：成功
+- 公開サイトに対するPlaywright **2/2件合格**：
+  - Chromium Desktop
+  - Pixel 7相当のChromiumモバイルエミュレーション
+- 公開サイトでの操作：ゲーム起動→資本金投入→部品発注・納品→製造→販売→買掛金支払い→ページ再読込による**自動**復元→手動読込→月次進行の**自動**保存→再読込・復元。モバイルでは350,000円の価格候補と横スクロールの有無も検査。
+- `JAPAN AUTO TYCOON / Pages` ステータス：**success**、公開URLへリンク。
 
-## Scope and known limitations
-- Playable **small accounting/manufacturing loop**, not the full long-term Japanese auto manufacturing simulation.
-- Demand is fictional and suppliers are demo fixtures. NPC manufacturer AI, true factory 18-step execution, taxation, finance realism, product physics calibration and long-haul balance are incomplete.
-- On first visit choose **新規経営デモ開始** → **部品を発注・納入** → **エンジン製造** → **完成品を販売** → **仕入代金を支払う**. Reload requires the save section's **読み込み** action; the browser stores IndexedDB data on the current browser/origin.
-- A GitHub Pages release only serves static code. The game does not have a server-side shared save cloud. Browser storage can be cleared; use **JSON出力** for personal backup.
+### 後続CI（サイト公開版とは別）
+- ソースCI [38119727011](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38119727011) ：公開対象SHAのCI成功。
+- 手動専用公開トリガーへの復元コミット `16e7c289031e1577031262c7ba665138c55f9f09` の [CI 38120046383](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38120046383) も **成功**：Vitest88/88、E2E85件合格・3件スキップ、npm監査0件。**これはPagesの再公開ではありません**。
+- `main` の後続ドキュメントコミットはサイトの公開SHAではありません。
 
-## Release policy and follow-up
-- Current deployed game commit is **fcdb05a...** even if the repo main branch gains docs-only commits after release. Never treat the main branch's later commit as deployed until its own release and live SHA check succeeds.
-- New code changes require new build/unit/E2E/security CI and another **manual** `Publish playable preview` run to update Pages.
-- For real-device verification, test opening the URL on physical PC and phone and verify a full cycle plus refresh/save load. Report browser/device and any issue for further fixes.
-- If the release URL stops working, inspect the current Pages status and GitHub Actions logs, and verify the hosted release marker against the intended release SHA.
+## 実際に利用可能になったPhase 2機能
+- デフォルト`slot-1`保存データの起動時自動復元、破損データ時のバックアップ世代への復元
+- 月次進行のアトミック自動保存。保存失敗時に年月を確定しない。保存中の競合操作は抑止
+- スマホ向けショートカット・大型ボタン・価格プリセット・5段階経営進捗ガイド
+- 125年間／1,500か月のモデル暦・保存不変条件と100年間／1,200か月の会計不変条件の単体テスト
+
+## 限界と注意
+- 実サイトのブラウザ試験は**GitHubホストのChromium**によるPC/スマホ相当の自動操作。**物理iPhone/Android/実機PC**での手動確認ではありません。
+- 公開サイトは静的アプリで、セーブは端末・ブラウザのIndexedDB内。クラウド同期はありません。バックアップ用にJSON出力を推奨。
+- 125年テストは暦・コマンド再現性・会計不変条件の確認であり、完成版のNPC競争・工場18工程・需要経済の長期バランスを証明しません。
+- 別のウェブ閲覧クライアントからはページ取得に失敗しましたが、上記GitHub Actionsの**実公開HTTPSリクエストとデプロイ後2件の受入試験**は成功しています。現在時点のすべてのネットワーク・端末に対する可用性を保証するものではありません。
+- 次回のゲームコード再公開は、CI合格後にリポジトリ管理者が **Actions → Publish playable preview → Run workflow** を手動で実行してください。
+
+## 旧公開版（履歴）
+- 以前の配布SHA：`fcdb05a39479184cbb7687d970ed18a9ce78059f`
+- [旧Pages実行 38117402371](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38117402371) は88件ではなくVitest86件、ブラウザ76件、ライブ2件合格でした。現在の公開ソースの根拠ではありません。
