@@ -32,6 +32,7 @@ function App(){
  const advance=async(n:1|3|6|12)=>{
   if(advancing||!ready)return;
   setAdvancing(true);
+  setStatus("月次進行を保存中…");
   try{
    const id=`ui:${game.revision}`;
    const next=n===1?dispatch(game,{id,kind:"AdvanceMonth"}).state:advanceMonths(game,n,id).state;
@@ -51,7 +52,7 @@ function App(){
  <nav className="quick-nav" aria-label="主要操作"><a href="#business-cycle">経営サイクルを遊ぶ</a><a href="#save-manager">セーブ管理</a></nav>
  <main>
  <section><h1>{game.companies[0]?.name??"不明な企業"}</h1><p>年月：{yearMonth(game.calendar)}</p><p>進行コマンド数：{game.revision}</p><div className="actions">{([1,3,6,12] as const).map(n=><button key={n} disabled={advancing} onClick={()=>void advance(n)}>{n}ヶ月進行</button>)}</div><small>月次進行は自動保存します。保存失敗時は進行を確定しません。</small></section>
- <section id="save-manager"><h2>セーブ管理</h2><p className="save-hint">起動時は「slot-1」を自動復元します。他のスロットは「読み込み」で切り替えてください。JSON出力で手元にも控えを保存できます。</p><label>スロット名 <input value={slot} onChange={e=>setSlot(e.target.value)} /></label><div className="actions"><button onClick={save}>保存</button><button onClick={load}>読み込み</button><button onClick={restore}>バックアップ復元</button><button onClick={exportJson}>JSON出力</button></div><label>JSON取り込み <input type="file" accept=".json,application/json" onChange={e=>void importJson(e.target.files?.[0]??null)} /></label><p role="status">{status}</p></section>
+ <section id="save-manager"><h2>セーブ管理</h2><p className="save-hint">起動時は「slot-1」を自動復元します。他のスロットは「読み込み」で切り替えてください。JSON出力で手元にも控えを保存できます。</p><label>スロット名 <input value={slot} onChange={e=>setSlot(e.target.value)} /></label><div className="actions"><button disabled={advancing} onClick={save}>保存</button><button disabled={advancing} onClick={load}>読み込み</button><button disabled={advancing} onClick={restore}>バックアップ復元</button><button onClick={exportJson}>JSON出力</button></div><label>JSON取り込み <input type="file" accept=".json,application/json" disabled={advancing} onChange={e=>void importJson(e.target.files?.[0]??null)} /></label><p role="status">{status}</p></section>
  <Dashboard game={game}/>
  <EngineDesigner/>
  <BusinessCyclePanel game={game} onSaved={setGame} slot={slot}/>
