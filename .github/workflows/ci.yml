@@ -4,7 +4,7 @@ on:
   pull_request:
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
   statuses: write
 jobs:
   test:
@@ -64,6 +64,18 @@ jobs:
             playwright-report/
             test-results/
           if-no-files-found: ignore
+      - name: Commit CI-generated verified lockfile
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          if git ls-files --error-unmatch package-lock.json > /dev/null 2>&1; then
+            echo 'Committed lockfile already present; no changes.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package-lock.json
+          git commit -m 'chore(deps): preserve audited and tested npm lockfile [skip ci]'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
       - name: Publish phase CI status for SHA-based verification
         if: always() && github.event_name == 'push'
         continue-on-error: true
