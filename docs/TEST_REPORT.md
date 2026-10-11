@@ -1,5 +1,8 @@
 # TEST REPORT — 2026-10-11
 
+**2026-10-11 最新確認:** GitHub repo visibility は **Public**。最新の検証済みソースSHA `1752e25245f9a65da3985504c78097394c5e9a44` / [CI 38115779069](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38115779069) は build・Vitest 86/86・4ブラウザE2E 76/76・npm audit 0件・Pagesビルド検査および公開後E2Eの検出に合格。**公開Pagesと公開サイト上のセーブ検証は未確認**。GitHub管理者は [Settings → Pages](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/settings/pages) で Source=GitHub Actions を設定後、[Actions](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions) の Publish playable preview を手動実行。実サイトのHTML/JS・PC/スマホ相当のブラウザ操作と保存復元が完了するまでURLを配布しない。今回 `.github/workflows/publish-preview.yml` に事前ゲート失敗のSHA別ステータス記録を追加（コミット `defb4969def8606094a66f30009cfab3789f4ca4`）。最新コード変更のCIは未確認。詳細は `docs/OWNER_PAGES_ACTIONS.md`。
+
+
 ## Verified CI run
 - URL: https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38109615764/job/114382280133
 - Job: 114382280133. Run: 38109615764. Tested SHA: caa42d531139eaf0b344cda3c1d9d323dda9d9e3.
