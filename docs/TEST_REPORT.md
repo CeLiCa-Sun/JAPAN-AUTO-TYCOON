@@ -1,17 +1,15 @@
 # TEST REPORT — 2026-10-11
-## Verified source/commit operations
-- Reviewed previous main head 016a2a866405b9e52484fffbc62df009894de265.
-- Added duplicate RPM rejection and calibration RMSE (kW) plus signed mean bias (kW).
-- Added tests/calibration-metrics.test.ts with synthetic zero-error, biased-reference and duplicate-RPM cases.
-## CI execution evidence
-- Combined commit statuses returned [].
-- GitHub connector run lookup returned [] but only lists PR-triggered runs; this DOES NOT indicate main push CI outcome.
-- Public GitHub Actions page could not be retrieved.
+## Verified writes / inspection
+- Previous main head 84489b5f342f533b9ffa9467ea1a137b8c9c425b inspected.
+- GitHub combined status [] and PR-only workflow lookup [] (neither confirms push CI).
+- Source-verified Robin EY20D gasoline engine geometry and published dynamometer Table 4 measurements recorded in docs/DYNO_ROBIN_EY20D.md.
+- tests/robin-ey20d.test.ts added; 3000/3500 RPM table lines have >5% torque/power inconsistency and are excluded from valid subset.
+## Execution evidence
 - npm run build: NOT executed.
 - npm test: NOT executed.
-- npm run test:e2e: NOT executed.
-- Chromium desktop/mobile, Firefox and WebKit save scenarios: NOT executed.
+- npm run test:e2e: NOT executed. No Chromium desktop/mobile, Firefox, WebKit pass evidence.
+- All save 3-generation, corruption, legacy migration, quota, abort, read error and factory restore scenarios NOT browser verified.
 ## Calibration
-- Added mathematical error reporting only. No source-verified matching engine/dyno RPM curve used; no empirical coefficients fitted. Synthetic test inputs are not measured evidence.
-## Stage 0 quality gate
-NOT PASSED. Requires verified successful build, Vitest and all Playwright projects tied to the exact tested commit SHA.
+- Research has a source-attributed published RPM curve (1-cyl 67 x 52 mm, CR 6.3), but no conditions-matched VE/thermal efficiency, environmental correction or measurement error estimates. Mathematical comparison test authored but NOT EXECUTED; no actual fit or held-out validation, no claim of calibrated model.
+## Stage 0
+NOT PASSED. Require actual CI job logs and verified successful build/Vitest/all Playwright projects tied to exact tested commit SHA.
