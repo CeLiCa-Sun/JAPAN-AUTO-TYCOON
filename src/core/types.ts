@@ -1,6 +1,6 @@
 export type ID = string;
 export type YearMonth = `${number}-${number}`;
-export type Account = "cash" | "equity" | "revenue" | "expense" | "inventory" | "receivable" | "payable";
+export type Account = "cash" | "equity" | "revenue" | "expense" | "inventory" | "receivable" | "payable" | "loan" | "fixedAsset" | "accumulatedDepreciation";
 export interface LedgerEntry { account: Account; debit: number; credit: number }
 export interface JournalTransaction { id: ID; companyId: ID; month: YearMonth; description: string; entries: LedgerEntry[] }
 export interface Company { id: ID; name: string; founded: YearMonth }
