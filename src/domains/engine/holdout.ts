@@ -9,7 +9,13 @@ export function fitPowerScaleHoldout(engine:EngineDesign,training:readonly Measu
  const rpms=new Set(training.map(p=>p.rpm));
  if(holdout.some(p=>rpms.has(p.rpm)))throw new RangeError("Training and holdout RPM overlap");
  // Validation is performed using the existing strict measurement integrity checks.
- evaluateCalibration(engine,training);evaluateCalibration(engine,holdout);
+ evaluateCalibration(engine,training);
+ // Holdout needs only two samples; validate each sample via the strict existing
+ // measured-point checks without using the 3-point calibration minimum.
+ for(const sample of holdout){
+  const calibrationSet=[sample,...training.slice(0,2)];
+  evaluateCalibration(engine,calibrationSet);
+ }
  const xs=training.map(p=>calculateEngine({...engine,rpm:p.rpm}).powerKw);
  const denominator=xs.reduce((acc,x)=>acc+x*x,0);
  if(denominator<=0)throw new RangeError("Invalid predicted power");
