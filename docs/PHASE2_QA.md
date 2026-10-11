@@ -1,4 +1,7 @@
 # Phase 2 — accessibility, automatic saves and 125-year test checkpoint
+
+**現行の最新公開判定（2026-10-11）：** GitHub Pages [プレイURL](https://celica-sun.github.io/JAPAN-AUTO-TYCOON/) は Phase 2 を **SHA `4cffad1e30bf5f478e40f7d7f7f89487e07cee71`** で公開済み。 [Pages run 38119727017](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38119727017) の `verify-and-build` と `publish` が両方 SUCCESS、Vitest **88/88**、4ブラウザE2E **85合格・3スキップ・0失敗**、npm audit **0件**、公開HTML/JSとSHA検証、および公開サイトのChromium PC/スマホ相当（Pixel 7エミュレーション）ライブテスト **2/2合格**。自動復元・月次自動保存・モバイル価格候補もライブで確認。後続の [CI 38120046383](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38120046383) もSUCCESSだが**再公開を意味しない**。公開ワークフローは一時push起動から **`workflow_dispatch` 手動専用に戻した**。物理iPhone/Android/PCでの手動試験、およびNPC競争・本格18工程・経済の長期バランス検証は未実施・未完成。以前の「未公開」「CI実行中」「SHA fcdb05a」は履歴であり現行状態ではない。根拠： [docs/RELEASE_VERIFICATION.md](RELEASE_VERIFICATION.md)。
+
 Date: 2026-10-11
 
 ## Source vs deployed release
