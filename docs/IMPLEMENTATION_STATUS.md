@@ -3,3 +3,8 @@
 - Save: previous checksum, 3 generations, legacy fallback and corruption/quota/abort/read error/production restore tests exist, browser results unverified.
 - Robin EY20D: source-attributed curve registered with two inconsistent points flagged. New training/holdout single power-scale fitter and test added but not executed. No actual error metrics reported and no physics coefficients claimed calibrated.
 - Factory and engineering simulations remain partially implemented and uncalibrated previews.
+
+## October 11 update
+- Added docs/STAGE0_OPERATOR_RUNBOOK.md: concrete manual Actions CI launch and run/job ID retrieval instructions.
+- Stage 0 remains NOT PASSED: no verified build, Vitest, or Playwright execution result.
+- Browser save recovery and engine holdout evaluation remain unexecuted.
