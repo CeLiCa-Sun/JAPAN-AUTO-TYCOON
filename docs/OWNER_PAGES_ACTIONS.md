@@ -1,5 +1,10 @@
 # JAPAN AUTO TYCOON — GitHub Pages 公開に必要な操作
 
+**RELEASE VERIFIED — 2026-10-11:** [公開プレイ版](https://celica-sun.github.io/JAPAN-AUTO-TYCOON/) は GitHub Pages 手動実行 [38117402371](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38117402371) で公開済み。**公開対象SHAは `fcdb05a39479184cbb7687d970ed18a9ce78059f`**。`verify-and-build` (job `114404945279`): npm audit 0件、Vitest 86/86、4ブラウザE2E 76/76、Pagesビルド合格。`publish` (job `114405308261`): Pages設定・デプロイ成功、実URLのHTML/JS取得とSHA照合成功、**実サイト上のPC/スマホ相当のChromium Playwright 2/2合格**（経営サイクル・IndexedDBセーブ/リロード）。スマホはエミュレーションであり実機ではない。旧記述の「未公開・Pages 404・実テスト未実施」は**過去の段階の履歴**であり現状を表さない。証拠の詳細: [`docs/RELEASE_VERIFICATION.md`](RELEASE_VERIFICATION.md)。後続のドキュメントのみのコミットは新たなゲーム公開を意味しない。
+
+**現在、ユーザーによるPages設定・手動公開の再操作は不要です。** 新しいコードを再デプロイする場合だけ、Actionsから Publish playable preview を実行してください。既存の公開手順は次回リリース用の参照として残しています。
+
+
 **確認日:** 2026-10-11
 **公開状況:** リポジトリは **Public（公開）** と確認済み。ただし Pages のサイト公開は未確認。前回の公開ジョブ `38114576750` は `actions/configure-pages@v5` の HTTP 404 で失敗。現在の接続から Pages 設定変更・手動ワークフロー実行はできないため管理者操作が必要。
 
