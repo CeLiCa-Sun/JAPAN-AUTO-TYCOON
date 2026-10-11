@@ -78,11 +78,14 @@ export function BusinessCyclePanel({game,onSaved,slot}:{game:GameState;onSaved:(
   return paySupplier(game,finance.payable,"ui:pay:"+game.revision);
  },"仕入先への買掛金を現金で支払いました");
 
- return <section aria-label="経営サイクル試作">
+ const completedSteps=[game.journals.length>0,(game.production?.purchaseOrders?.length??0)>0,(game.production?.completedOrders?.length??0)>0,(game.marketSales?.reduce((n,s)=>n+s.quantity,0)??0)>0,finance.payable===0&&finance.revenue>0];
+ const completedCount=completedSteps.filter(Boolean).length;
+ return <section id="business-cycle" aria-label="経営サイクル試作">
   <h2>経営サイクル（プレイ試作）</h2>
   <p>資本金を投入し、部品を仕入れ、エンジンを製造して販売する小規模な経営デモです。</p>
   <div aria-label="プレイガイド">
    <h3>初回プレイガイド</h3>
+   <p className="play-progress">今回の経営ステップ：<strong>{completedCount}/5 完了</strong></p>
    <p>次に押すボタン：<strong>{nextAction}</strong></p>
    <p>1. 初期資金 → 2. 部品の発注・受入 → 3. エンジン製造 → 4. 市場へ販売 → 5. 買掛金支払。残った在庫で繰り返し経営できます。</p>
    <small>既存データがある場合は先に「読み込み」で復元してください。旧デモの原価不明在庫とは混合できません。</small>
@@ -97,12 +100,13 @@ export function BusinessCyclePanel({game,onSaved,slot}:{game:GameState;onSaved:(
   </div>
   <p>部品在庫：ブロック {available.find(m=>m.partId==="block")?.quantity??0}個、ピストン {available.find(m=>m.partId==="piston")?.quantity??0}個</p>
   <div className="actions"><button disabled={busy||game.journals.length>0||Boolean(game.production)} onClick={()=>void start()}>1. 新規経営デモ開始</button></div>
-  <label>製造数量（1～10） <input type="number" min="1" max="10" value={count} onChange={e=>setCount(Number(e.target.value))}/></label>
+  <label>製造数量（1～10） <input type="number" inputMode="numeric" min="1" max="10" value={count} onChange={e=>setCount(Number(e.target.value))}/></label>
   <div className="actions">
    <button disabled={busy} onClick={()=>void procure()}>2. 部品を発注・納入</button>
    <button disabled={busy} onClick={()=>void manufacture()}>3. エンジン製造</button>
   </div>
-  <label>販売単価（円／基） <input type="number" min="1" step="1000" value={unitSalePrice} onChange={e=>setUnitSalePrice(Number(e.target.value))}/></label>
+  <label>販売単価（円／基） <input type="number" inputMode="numeric" min="1" step="1000" value={unitSalePrice} onChange={e=>setUnitSalePrice(Number(e.target.value))}/></label>
+  <div className="price-presets" role="group" aria-label="販売単価の候補"><span>価格の目安</span>{([350000,420000,900000] as const).map(price=><button type="button" key={price} aria-pressed={unitSalePrice===price} onClick={()=>setUnitSalePrice(price)}>{yen(price)}</button>)}</div>
   <div aria-label="市場需要の試算">
    <h3>販売市場（簡易需要モデル）</h3>
    <p>競合の参考価格：{yen(REFERENCE_PRICE_YEN)} ／ 想定購入需要：{market?.maxBuyers??"-"}基 ／ 月内残需要：{market?.remainingBuyers??"-"}基 ／ 今回販売見込：{market?.sellable??"-"}基 ／ 売れ残り：{market?.unsold??"-"}基</p>
