@@ -5,7 +5,7 @@ import {validateGameState} from "../../core/validation";
 import {financialSnapshot} from "../finance/reports";
 import type {EngineProgram} from "./program";
 import {planEngineProduction,inspectWorkOrder,commitProduction,validatePrototypeForProduction,type PartSpec,type MaterialStock} from "./manufacturing";
-/** Returns all linked updates together; caller must save the returned GameState. */
+/** Returns one immutable snapshot for inventory and journal; buyer-supplied raw materials must already be acquired. */
 export function manufactureEngines(state:GameState,program:EngineProgram,commandId:string,quantity:number,bom:readonly PartSpec[],accepted:number,coolingKw:number,octane:number):GameState {
  validateGameState(state);
  if(!commandId.trim()||state.completedCommandIds.includes(commandId)||state.production?.completedOrders.some(o=>o.orderId===commandId))throw new Error("Duplicate/invalid production command");
