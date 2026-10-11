@@ -25,6 +25,7 @@ test("recovers valid previous generation after primary checksum corruption",asyn
 test("reopens a valid save after reload",async({page})=>{
  await page.goto("/");
  await page.getByRole("button",{name:"1ヶ月進行"}).click();
+ await expect(page.getByText("年月：1950-02")).toBeVisible();
  await page.getByRole("button",{name:"保存",exact:true}).click();
  await expect(page.getByRole("status")).toContainText("保存しました");
  await page.reload();
