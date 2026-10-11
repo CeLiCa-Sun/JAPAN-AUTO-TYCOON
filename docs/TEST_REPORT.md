@@ -1,12 +1,16 @@
 # TEST REPORT — 2026-10-11
-## Confirmed
-- Inspected main source and workflow.
-- Prior commit e3969619: combined statuses [] and PR-only run lookup []; push run outcome unknown.
-- Committed engine manufacturing helpers and tests.
-## Not executed
-- npm install / npm run build / npm test / npm run test:e2e.
-- Chromium, Firefox, WebKit, save migration/corruption/quota/abort.
+## Evidence observed
+- Inspected previous main head ae205f1f9df5aed0ee2b3d9d324f8b2f98f71bdf.
+- GitHub source fetches and source commits succeeded.
+- Added backward-compatible optional production state, validation, engine work-order journal/inventory integration and three Vitest cases.
+## Tests NOT executed
+- npm install / npm run build (TypeScript+Vite) / npm test (Vitest).
+- npm run test:e2e (Chromium desktop/mobile, Firefox, WebKit).
+- IndexedDB save corruption, 3-generation recovery, legacy migration, quota simulation and transaction abort.
+## CI limitation
+- Previous GitHub commit status and PR-only run lookup do not provide main push job logs. No passing or failing CI job output was obtained. Do not mark tests passed or invent errors.
 ## Stage 0 gate
-NOT PASSED. Requires actual successful build, Vitest and browser test evidence tied to a commit SHA. Do not infer success from committed test sources.
-## Limitations
-Engine BOM/work-order and stock inspection are pure helpers, not persisted full factory/accounting transactions. 1200-month test remains calendar-only.
+NOT PASSED. Source/test creation and valid GitHub commits do not demonstrate runtime correctness.
+## Caveats
+- Production state is optional to preserve schemaVersion 1 saves, and is returned immutably from production command. App UI does not yet initiate/commit factory work orders. saveAtomic can persist returned state, but this workflow has not been browser-tested.
+- Complete industrial simulation, integration with actual factory capacity/procurement and 100-year economy still pending.
