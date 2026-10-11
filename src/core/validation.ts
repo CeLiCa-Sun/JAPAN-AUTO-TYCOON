@@ -11,6 +11,11 @@ export function validateGameState(value: unknown): asserts value is GameState {
  const journalIds = new Set<string>();
  for (const j of s.journals) { validateJournal(j); if (journalIds.has(j.id) || !companyIds.has(j.companyId)) throw new Error("Invalid journal reference or duplicate"); journalIds.add(j.id); }
  if (s.completedCommandIds.some(id => typeof id !== "string" || !id) || new Set(s.completedCommandIds).size !== s.completedCommandIds.length) throw new Error("Invalid command history");
+ if(s.marketSales!==undefined){
+  if(!Array.isArray(s.marketSales))throw new Error("Invalid market sales");
+  const periods=new Set<string>();
+  for(const m of s.marketSales){if(!m||typeof m.month!=="string"||!/^[0-9]{4}-(0[1-9]|1[0-2])$/.test(m.month)||periods.has(m.month)||!Number.isSafeInteger(m.quantity)||m.quantity<1)throw new Error("Invalid market sale record");periods.add(m.month);}
+ }
  if(s.production!==undefined){
   const p=s.production;
   if(!p||!Array.isArray(p.materials)||!Array.isArray(p.completedOrders))throw new Error("Invalid production state");
