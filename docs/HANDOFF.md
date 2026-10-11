@@ -1,14 +1,12 @@
 # HANDOFF — 2026-10-11
-Repository CeLiCa-Sun/JAPAN-AUTO-TYCOON, branch main.
-Recent commits:
-- engine/calculation.ts: heuristic compression, friction, pumping and knock modifiers.
-- finance/lifecycle.ts and tests/lifecycle.test.ts: loan installments, capital purchases, integer depreciation.
-- storage/atomic.ts: SHA-256 save envelope; atomic IDB rotation across three entries; detects corrupt envelope, reads legacy primary slot.
-- main.tsx: connects UI save and load to atomic storage.
-Critical next:
-1. Obtain push CI logs and run npm build/Vitest/Playwright; repair any failure before calling any stage verified.
-2. Save recovery tests in browser: primary corrupt/missing, generation valid, interruption/abort, old schema v1.
-3. Add real structured account period and cash-flow journal, enforce business invariants at command boundary; avoid confusing standalone finance helper calls with posted transactions.
-4. Calibrate engine predictions to dyno samples and implement thermal/knock/durability estimation with model version and uncertainty envelope.
-5. Replace calendar-only 1200-month smoke with economy/market/production/NPC simulations.
-No quality gate should be marked passed without test evidence.
+Repo: CeLiCa-Sun/JAPAN-AUTO-TYCOON / main.
+Focused on A: CI/testing, without changing the already committed engine/finance core.
+Changes:
+- src/storage/atomic.ts: fix rotation when previous generations have gaps/corruption; delete stale generations in same IDB write transaction.
+- e2e/storage.spec.ts: actual-browser test definitions for corrupted SHA-256 primary and restore from generation 1, reload persistence (Chromium desktop and mobile projects).
+- docs/TEST_REPORT.md and IMPLEMENTATION_STATUS.md updated.
+Next required:
+1. Use GitHub Actions > CI on main to inspect push job build/Vitest/Playwright logs. Current connector supports PR-run lookup, not arbitrary push-run retrieval; do not assume zero checks means no CI.
+2. Fix any observed build/runtime issues using real logs. Commit exact fix and repeat until passing.
+3. Verify IndexedDB old saves, rotation with missing generations, tamper recovery and transaction abort in Chromium. Add Firefox/WebKit.
+4. Only then mark Stage 0 verified. Preserve schemaVersion 1 compatibility and full scope of MASTER_SPEC.
