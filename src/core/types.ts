@@ -5,7 +5,10 @@ export interface LedgerEntry { account: Account; debit: number; credit: number }
 export interface JournalTransaction { id: ID; companyId: ID; month: YearMonth; description: string; entries: LedgerEntry[] }
 export interface Company { id: ID; name: string; founded: YearMonth }
 export interface GameCalendar { year: number; month: number }
-export interface GameState { schemaVersion: 1; calendar: GameCalendar; seed: number; companies: Company[]; journals: JournalTransaction[]; completedCommandIds: ID[]; revision: number }
+export interface ProductionInventory {partId:string;quantity:number}
+export interface ProducedEngine {orderId:string;programId:string;accepted:number;rejected:number;totalCostYen:number}
+export interface ProductionState {materials:ProductionInventory[];completedOrders:ProducedEngine[]}
+export interface GameState { schemaVersion: 1; calendar: GameCalendar; seed: number; companies: Company[]; journals: JournalTransaction[]; completedCommandIds: ID[]; revision: number; production?: ProductionState }
 export interface DomainEvent { id: ID; kind: "MonthAdvanced" | "JournalPosted"; commandId: ID; month: YearMonth; payload: Record<string, unknown> }
 export type GameCommand =
   | { id: ID; kind: "AdvanceMonth" }
