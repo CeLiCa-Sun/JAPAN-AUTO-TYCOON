@@ -1,5 +1,7 @@
 # JAPAN AUTO TYCOON — public playable preview release
 
+**最新の確認済み CI:** [run 38116832464](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38116832464)（コミット `defb4969def8606094a66f30009cfab3789f4ca4`）でビルド成功、Vitest 86/86、4ブラウザE2E 76/76、npm監査0件、Pages用アセット確認2件、公開後テスト2件の検出が成功。今回追加したリリースSHA照合処理のCIは別途実行中で、結果未確定。Pagesの手動公開実行は確認できず、公開サイトのプレイ・セーブ復元も未検証。
+
 **2026-10-11 最新確認:** GitHub repo visibility は **Public**。最新の検証済みソースSHA `1752e25245f9a65da3985504c78097394c5e9a44` / [CI 38115779069](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38115779069) は build・Vitest 86/86・4ブラウザE2E 76/76・npm audit 0件・Pagesビルド検査および公開後E2Eの検出に合格。**公開Pagesと公開サイト上のセーブ検証は未確認**。GitHub管理者は [Settings → Pages](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/settings/pages) で Source=GitHub Actions を設定後、[Actions](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions) の Publish playable preview を手動実行。実サイトのHTML/JS・PC/スマホ相当のブラウザ操作と保存復元が完了するまでURLを配布しない。今回 `.github/workflows/publish-preview.yml` に事前ゲート失敗のSHA別ステータス記録を追加（コミット `defb4969def8606094a66f30009cfab3789f4ca4`）。最新コード変更のCIは未確認。詳細は `docs/OWNER_PAGES_ACTIONS.md`。
 
 
