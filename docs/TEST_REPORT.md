@@ -1,13 +1,12 @@
 # TEST REPORT — 2026-10-11
-## GitHub evidence
-- Latest existing repo commit inspected: e1a165c1889c5224da33e75cbd646ce52750d9d0.
-- New engine prototype-to-finance journal bridge and two Vitest test cases committed.
-- No GitHub Actions push run ID or job log available through connected GitHub PR-only run lookup. The absence of returned statuses is not a pass or failure.
-## Execution
-- TypeScript build: NOT run/verified.
-- Vitest: NOT run/verified.
-- Chromium desktop/mobile, Firefox, WebKit: NOT run/verified.
-- IndexedDB corruption/transaction abort/quota/migration: tests exist but NOT run.
-- Actual engine dynamometer calibration: NOT performed; candidate reference lacks verified matching engine/conditions.
-## Release decision
-No quality gate passed. Need real CI run/job log, failing steps and rerun evidence. No test success may be asserted.
+## Confirmed
+- Inspected main source and workflow.
+- Prior commit e3969619: combined statuses [] and PR-only run lookup []; push run outcome unknown.
+- Committed engine manufacturing helpers and tests.
+## Not executed
+- npm install / npm run build / npm test / npm run test:e2e.
+- Chromium, Firefox, WebKit, save migration/corruption/quota/abort.
+## Stage 0 gate
+NOT PASSED. Requires actual successful build, Vitest and browser test evidence tied to a commit SHA. Do not infer success from committed test sources.
+## Limitations
+Engine BOM/work-order and stock inspection are pure helpers, not persisted full factory/accounting transactions. 1200-month test remains calendar-only.
