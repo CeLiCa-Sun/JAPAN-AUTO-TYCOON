@@ -1,9 +1,10 @@
 # HANDOFF — 2026-10-11
-Repo CeLiCa-Sun/JAPAN-AUTO-TYCOON, main. Prior head d6d4660e.
-User insists Stage 0 must pass based on real CI evidence, not committed code.
+Repo CeLiCa-Sun/JAPAN-AUTO-TYCOON / main.
+Prior head c2ea2127. User insists Stage 0 cannot be marked done until build, Vitest and cross-browser E2E all pass with real evidence.
 This turn:
-- src/app/FactoryPanel.tsx introduces opt-in demo capitalization, component stock, manufacturing and atomic save.
-- src/main.tsx connects FactoryPanel and removes unused backup imports.
-- e2e/factory.spec.ts tests capital -> manufacture -> stock/journal save -> reload.
-All runtime tests UNVERIFIED, Stage 0 NOT PASSED.
-Required follow-up: find actual GitHub Actions push run/job ID, fetch logs, fix compiler/Vitest/Playwright failures, rerun; record passing counts and commit SHA. Validate save quota/corruption/abort/generation/legacy across browsers. Extend factory demo to genuine procurement/capacity and avoid artificial starting funds. Preserve end-of-turn multiple checkboxes and freeform extra request textarea.
+- src/app/FactoryPanel.tsx: capital initial journal uses current game month; busy state disables save/production buttons.
+- e2e/factory-recovery.spec.ts: test scenario for corrupt primary with valid older manufacturing save; later-month initialization.
+- QA docs updated.
+Tool limits: GitHub connector fetches repo source and commits but workflow discovery by commit only returns PR runs. No run/job ID obtained. Container cannot resolve github.com, so full private repo cannot be cloned or dependencies installed. No build/unit/E2E executed.
+Next: retrieve actual CI main push run/job ID via GitHub Actions UI, use connected fetch_workflow_job_logs with the real job ID. Fix observed TS/Vitest/Playwright failures and rerun. Validate production-save recovery on Chromium desktop/mobile, Firefox, WebKit; quota/abort/legacy. Implement real procurement/factory capacity/finished goods accounting separately after Stage 0 gate.
+Continue ending each turn with multi-select checkboxes and freeform other instructions textarea.
