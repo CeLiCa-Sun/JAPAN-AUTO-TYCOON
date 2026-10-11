@@ -1,11 +1,9 @@
 # HANDOFF — 2026-10-11
-Repository CeLiCa-Sun/JAPAN-AUTO-TYCOON, main. Prior head reviewed cd7c6be5.
-New src/domains/engine/holdout.ts: fits one power multiplier on training sample using least squares and evaluates distinct validation sample. tests/robin-holdout.test.ts uses five internally consistent published EY20D rows, train RPM 1000/2000/4000, holdout RPM 1500/2500. 3000 and 3500 rows excluded for published torque/power inconsistency.
-Not yet executed: build, Vitest, Playwright Chromium PC/mobile/Firefox/WebKit; all IndexedDB save QA. No actual result numbers. Stage 0 NOT PASSED.
-GitHub connector has only PR-filtered run lookup by commit SHA; statuses [] are inconclusive. Obtain push-run ID and Actions job IDs from UI, fetch real logs, fix failures, rerun, document passing evidence. Next run also verify training/validation source conditions and quantitative results; do not present single power-scale as calibrated physics.
-Keep final checkbox multi-select and additional request input.
-
-## Operator action (2026-10-11)
-- Open Actions > CI > Run workflow on main and provide the run and test job URLs (instructions in docs/STAGE0_OPERATOR_RUNBOOK.md).
-- No job logs or actual passing build/Vitest/Playwright results obtained; Stage 0 remains NOT PASSED.
-- Training/holdout calibration has no executed result, and browser save QA remains unverified.
+Repo CeLiCa-Sun/JAPAN-AUTO-TYCOON main.
+Actual CI run evidence: https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38109294626/job/114381314656
+Checked-out SHA 4e8b29c7. npm install succeeded; build tsc failed TS2322 in src/core/types.ts:16 and src/domains/engine/settlement.ts:16. Vitest, browser installation and Playwright SKIPPED.
+Changes after this run: yearMonth() return assertion in src/core/types.ts; engine settlement now calls canonical yearMonth. Both committed.
+IMPORTANT: not yet retested. Stage 0 NOT PASSED until successful CI build, Vitest and all Chromium desktop/mobile, Firefox, WebKit E2E proof on the fixed SHA.
+Engine Robin EY20D: independent Python reproduction scale ~0.847631; train MAPE ~9.898%, holdout MAPE ~16.089%, holdout RMSE ~0.37563 kW. This does not show TypeScript tests passed or physically calibrated efficiency.
+Next fetch new Actions push run/job ID after commits, read actual logs, fix errors, verify save suite; document SHA/test counts.
+Keep final multiselect checkbox options and additional-request textarea.
