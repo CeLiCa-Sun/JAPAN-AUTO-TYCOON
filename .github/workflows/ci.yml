@@ -28,6 +28,8 @@ jobs:
           name: npm-audit-details
           path: npm-audit.json
           if-no-files-found: ignore
+      - name: Display resolved build and testing dependencies
+        run: npm ls vite vitest @vitest/mocker
       - name: Build TypeScript and Vite
         run: npm run build
       - name: Unit tests
@@ -36,6 +38,9 @@ jobs:
         run: npx playwright install --with-deps chromium firefox webkit
       - name: Chromium desktop/mobile and Firefox/WebKit E2E
         run: npm run test:e2e
+      - name: Dependency vulnerability gate (moderate and higher)
+        if: always()
+        run: npm audit --audit-level=moderate
       - name: Upload Playwright artifacts on failure
         if: failure()
         uses: actions/upload-artifact@v4
