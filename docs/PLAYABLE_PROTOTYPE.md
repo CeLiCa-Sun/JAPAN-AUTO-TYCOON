@@ -3,7 +3,7 @@
 > Status: code committed, **current SHA not yet verified by the full CI matrix**. Historical Stage 0 success does not certify these features.
 
 ## Start locally
-1. Install Node.js 22 and use `npm install`.
+1. Install Node.js 22 and use `npm ci` (lockfile committed and audited).
 2. Run `npm run dev`; open the URL printed by Vite in your browser.
 3. With a fresh save state, find **経営サイクル（プレイ試作）** and press **1. 新規経営デモ開始**.
 4. Choose 1–10 engines, press **2. 部品を発注・納入**, then **3. エンジン製造**.
@@ -34,3 +34,8 @@
 - [ ] `npm audit` package-level findings reviewed; `npm-audit-details` artifact inspected and safe updates tested.
 - [ ] All failures from **the exact new commit** repaired and rechecked in GitHub Actions.
 - [ ] Stage 0 passed historically on run 38110349471/job 114384424640, but current milestone has no verified pass until a newer run is observed.
+
+## Latest verified CI milestone
+- [38114198670](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38114198670): build PASS, 86/86 unit PASS, 76/76 desktop/mobile E2E PASS, npm audit 0 findings.
+- Lockfile committed to main in `237f3400fd4f3b8f4da84b4f93d154c2768679a3`, verified in repository.
+- Pages one-time release attempt was configured; use `JAPAN AUTO TYCOON / Pages` commit status and `docs/PUBLISH_PREVIEW.md` to confirm actual publication. Do not infer a public URL from a workflow configuration alone.
