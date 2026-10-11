@@ -128,3 +128,6 @@
 1. Inspect one GitHub Actions test job for the final stage commit and fix **observed** build/Vitest/E2E failures, if any.
 2. Use the npm-audit-details artifact to identify exact advisory dependencies and safe semver-compatible updates; rerun all gates after an upgrade.
 3. Extend demand with independent NPC competitor balance and monthly accounting/aging, then test a full year of playable business cycles.
+
+### Playability E2E locator review
+- Test review identified an ambiguous Playwright getByText(/買掛金/) locator after reload in e2e/business-cycle.spec.ts, which could match multiple elements (metric and explanation). It was replaced with getByText("買掛金",{exact:true}) in commit c6a845ddaf60f239acf5352b63d92fd878aa9e2b. This is a code-review fix, **not an observed CI failure**. The latest commit still requires real CI verification.
