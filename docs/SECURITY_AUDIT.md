@@ -23,3 +23,9 @@
 - [ ] Report actual pass counts and release SHA, *then* consider the manually gated Pages deployment.
 
 No deployment has been triggered, and no live URL is verified.
+
+## Verified resolution checkpoint (2026-10-11)
+- Real GitHub Actions CI run [38114198670](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38114198670): Vite 7.3.7, Vitest 4.1.11, build PASS, Vitest 86/86 PASS, Playwright 76/76 PASS, npm audit 0 vulnerabilities including the moderate-or-higher gate.
+- Real CI run [38114258320](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38114258320): entire pipeline and committed lockfile step PASS. GitHub bot committed actual npm `package-lock.json` via commit `237f3400fd4f3b8f4da84b4f93d154c2768679a3`; file verified on main (lockfile v3, 149 packages).
+- This supersedes the earlier *unverified* warnings above only for the stated CI-run dependency graph. Recheck audit on later updates. From now on install with `npm ci` rather than resolving new versions in each job.
+- Public deployment remains unverified until a Pages success status and live asset smoke check is observed.
