@@ -14,9 +14,10 @@ export interface FinanceSnapshot {cash:number;receivable:number;payable:number;i
 export function financialSnapshot(journals:JournalTransaction[],companyId:string):FinanceSnapshot{
  const rows=trialBalance(journals,companyId);
  const net=(a:Account)=>rows.find(r=>r.account===a)!.net;
- const revenue=-net("revenue"),expenses=net("expense")+net("costOfGoodsSold");
+ const creditBalance=(a:Account)=>-net(a)||0;
+ const revenue=creditBalance("revenue"),expenses=net("expense")+net("costOfGoodsSold");
  const sum=rows.reduce((n,r)=>n+r.net,0);
- return {cash:net("cash"),receivable:net("receivable"),payable:-net("payable"),inventory:net("inventory"),revenue,expenses,equity:-net("equity"),netIncome:revenue-expenses,balanced:sum===0};
+ return {cash:net("cash"),receivable:net("receivable"),payable:creditBalance("payable"),inventory:net("inventory"),revenue,expenses,equity:creditBalance("equity"),netIncome:revenue-expenses,balanced:sum===0};
 }
 export type BusinessTransaction =
  | {kind:"capital";id:string;companyId:string;month:`${number}-${number}`;amount:number}
