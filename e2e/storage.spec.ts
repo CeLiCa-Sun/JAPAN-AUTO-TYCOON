@@ -4,8 +4,7 @@ test("recovers valid previous generation after primary checksum corruption",asyn
  await page.getByRole("button",{name:"保存",exact:true}).click();
  await expect(page.getByRole("status")).toContainText("保存しました");
  await page.getByRole("button",{name:"1ヶ月進行"}).click();
- await page.getByRole("button",{name:"保存",exact:true}).click();
- await expect(page.getByRole("status")).toContainText("保存しました");
+ await expect(page.getByRole("status")).toContainText("自動保存済み");
  await page.evaluate(async()=>{
   await new Promise<void>((resolve,reject)=>{
    const opening=indexedDB.open("japan-auto-tycoon",1);
