@@ -1,11 +1,8 @@
 # HANDOFF — 2026-10-11
 
-Repository CeLiCa-Sun/JAPAN-AUTO-TYCOON, branch main.
-
-CI evidence: GitHub Actions run 38109487117 job 114381888247, tested SHA e2e74360baaa35486d210ef352c5c12ff99941aa. Build PASSED, Vitest FAILED 1/66, E2E SKIPPED. Detailed failure at tests/robin-holdout.test.ts: validation data only 2 points sent to evaluator requiring 3 points.
-
-Fixed src/domains/engine/holdout.ts in commit 891cee3e7f382e8bbfe40f46408c792cb3f71cd2. Validate each holdout measurement with the original strict input checks via two training samples and never use holdout values when calculating the fitted scale. **No successful rerun yet**.
-
-Next: run or locate Actions CI run triggered by corrected main commit, obtain job ID and exact logs; fix remaining Vitest/E2E failures. Confirm all browser save recovery tests. Document actual pass counts and SHA before marking Stage 0 passed. Do not confuse separately reproduced Python coefficients with TypeScript test evidence.
-
-When giving another development prompt, show multi-select checkbox options and an additional-request textarea.
+Repo CeLiCa-Sun/JAPAN-AUTO-TYCOON main.
+New real CI: run 38109615764 / job 114382280133 tested commit caa42d531139eaf0b344cda3c1d9d323dda9d9e3. Build and Vitest PASS; Playwright 16 PASS, 40 FAIL. Logs show shared root cause: status role returned 2 matches, global save message and factory demo status.
+Fix: src/app/FactoryPanel.tsx replaced factory <p role='status'> with <p aria-live='polite' aria-label='工場操作結果'> while keeping main global status unique. Committed f2bea1e2bdfd90955eff372778e050c83ada9e74. Must obtain a NEW CI run/job ID and verify all 4 projects; do not mark Stage 0 passed yet.
+Next investigate additional genuine E2E failures (if any) once locator ambiguity cleared; verify generation, corruption, old format, quota injection, abort, read error and factory restore.
+Other: report power-scale calibration limitations; npm audit needed for package-specific moderate/critical vulnerabilities.
+Continue to show multi-select checkboxes and additional-request textarea.
