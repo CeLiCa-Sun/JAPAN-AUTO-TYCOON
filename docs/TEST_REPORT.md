@@ -1,17 +1,14 @@
-# TEST REPORT — 2026-10-11 (latest)
-## Source verification
-- GitHub fetches of existing code succeeded before changes.
-- Source commits succeeded for engine heuristics, finance lifecycle, checksum save, and main UI wiring.
-- GitHub combined status on previous head reported zero statuses. That does not prove Actions did not run.
-## Executed tests
-- No npm install, TypeScript build, Vitest or Playwright execution was performed in this chat.
-- No CI pass is confirmed. All newly written code and tests are **UNVERIFIED**.
-## Tests included
-- Existing desktop/mobile Chromium smoke cases.
-- Existing 1200-month deterministic calendar-only smoke test (not an economic long-run simulation).
-- tests/lifecycle.test.ts: loan repayment, insufficient cash, fixed-asset purchase, exact-total depreciation.
-## Outstanding
-- Confirm CI push logs through GitHub Actions UI and fix observed errors.
-- Execute browser tests including legacy-save migration and damaged checksum recovery.
-- Test multi-generation IndexedDB transaction atomicity under abort/failure.
-- Verify 1200+ month economics once production/manufacturing/market/NPC modules exist.
+# TEST REPORT — 2026-10-11 (CI verification pass)
+## Confirmed by GitHub connector
+- Current source, workflow and test files retrieved from main.
+- Save generation rotation fix committed: valid older generations are retained even when primary corrupted; stale generations are deleted during atomic transaction.
+- e2e/storage.spec.ts committed: Chromium desktop/mobile recovery from tampered SHA-256 envelope and save/load after page reload.
+## Execution evidence
+- GitHub combined status API returned no commit statuses for the prior head.
+- The available workflow-run lookup only returns PR-triggered runs, so its empty output cannot establish whether push workflows have run.
+- Actual npm installation, TypeScript compilation, Vitest, and Playwright runs are NOT executed/verified here. No passing build or test claimed.
+## Next actions
+- Obtain actual GitHub Actions push run logs, fix failing steps, rerun.
+- Test corrupt primary and valid older generation rotation (not just load).
+- Test IDB abort and schema 1 migration.
+- Preserve 1200-month calendar test distinction from full economic endurance.
