@@ -2,7 +2,7 @@
 
 日本を舞台に1950年から100年以上の経営を目指す自動車メーカー経営シミュレーション。
 
-> **最小プレイ試作版（動作コードのCI検証済み、公開は未完了）**。Actions run `38114679080` でビルド・Vitest 86件・4ブラウザE2E 76件・npm監査0件を確認。GitHub Pagesは未設定のため公開に失敗しました。完成版ではありません。
+> **ブラウザで遊べる最小プレイ試作版（公開・ライブ動作確認済み）**。GitHub Pagesの公開ジョブ `38117402371` でビルド、Vitest **86/86**、4ブラウザE2E **76/76**、npm監査 **0件**、実サイトのPC・スマホ相当のPlaywright **2/2** に合格。正式な完成版ではありません。
 
 ## 起動
 
@@ -17,7 +17,7 @@ npm test
 
 Reactアプリの「経営サイクル（プレイ試作）」から資金投入→部品発注→製造→需要に応じた販売→仕入先支払を操作できます。単一HTML試作版 `prototypes/index.html` は独立した旧デモです。
 
-**公開URLはまだ確認されていません。** GitHub Pagesの手動デプロイ準備については `docs/PUBLISH_PREVIEW.md` を参照してください。
+**今すぐプレイ： [GitHub Pages 公開試作版](https://celica-sun.github.io/JAPAN-AUTO-TYCOON/)**（公開済みコミット：`fcdb05a39479184cbb7687d970ed18a9ce78059f`）。公開テストと制約は `docs/RELEASE_VERIFICATION.md`。今後の再公開手順は `docs/PUBLISH_PREVIEW.md` を参照。
 
 ## 実装状況
 
