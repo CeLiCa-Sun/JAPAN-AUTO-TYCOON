@@ -22,7 +22,15 @@ const pendingSaves=new Map<string,Promise<void>>();
 /** Serialize overlapping saves for a slot within this tab. Cross-tab coordination remains future work. */
 export function saveAtomic(slot:string,state:GameState):Promise<void>{
  const prior=pendingSaves.get(slot)??Promise.resolve();
- const queued=prior.catch(()=>undefined).then(()=>saveAtomicUnchecked(slot,state));
+ const queued=prior.catch(()=>undefined).then(async()=>{
+  // Web Locks serializes writers across tabs of the same origin when supported.
+  // Keep the in-tab queue for browsers without navigator.locks support.
+  if(typeof navigator!=="undefined"&&navigator.locks?.request){
+   await navigator.locks.request("japan-auto-tycoon:save:"+slot,async()=>saveAtomicUnchecked(slot,state));
+  }else{
+   await saveAtomicUnchecked(slot,state);
+  }
+ });
  pendingSaves.set(slot,queued);
  void queued.finally(()=>{if(pendingSaves.get(slot)===queued)pendingSaves.delete(slot);}).catch(()=>undefined);
  return queued;
