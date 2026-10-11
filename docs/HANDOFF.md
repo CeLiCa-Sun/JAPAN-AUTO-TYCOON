@@ -1,9 +1,11 @@
 # HANDOFF — 2026-10-11
-Repo CeLiCa-Sun/JAPAN-AUTO-TYCOON main.
-Actual CI run evidence: https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38109294626/job/114381314656
-Checked-out SHA 4e8b29c7. npm install succeeded; build tsc failed TS2322 in src/core/types.ts:16 and src/domains/engine/settlement.ts:16. Vitest, browser installation and Playwright SKIPPED.
-Changes after this run: yearMonth() return assertion in src/core/types.ts; engine settlement now calls canonical yearMonth. Both committed.
-IMPORTANT: not yet retested. Stage 0 NOT PASSED until successful CI build, Vitest and all Chromium desktop/mobile, Firefox, WebKit E2E proof on the fixed SHA.
-Engine Robin EY20D: independent Python reproduction scale ~0.847631; train MAPE ~9.898%, holdout MAPE ~16.089%, holdout RMSE ~0.37563 kW. This does not show TypeScript tests passed or physically calibrated efficiency.
-Next fetch new Actions push run/job ID after commits, read actual logs, fix errors, verify save suite; document SHA/test counts.
-Keep final multiselect checkbox options and additional-request textarea.
+
+Repository CeLiCa-Sun/JAPAN-AUTO-TYCOON, branch main.
+
+CI evidence: GitHub Actions run 38109487117 job 114381888247, tested SHA e2e74360baaa35486d210ef352c5c12ff99941aa. Build PASSED, Vitest FAILED 1/66, E2E SKIPPED. Detailed failure at tests/robin-holdout.test.ts: validation data only 2 points sent to evaluator requiring 3 points.
+
+Fixed src/domains/engine/holdout.ts in commit 891cee3e7f382e8bbfe40f46408c792cb3f71cd2. Validate each holdout measurement with the original strict input checks via two training samples and never use holdout values when calculating the fitted scale. **No successful rerun yet**.
+
+Next: run or locate Actions CI run triggered by corrected main commit, obtain job ID and exact logs; fix remaining Vitest/E2E failures. Confirm all browser save recovery tests. Document actual pass counts and SHA before marking Stage 0 passed. Do not confuse separately reproduced Python coefficients with TypeScript test evidence.
+
+When giving another development prompt, show multi-select checkbox options and an additional-request textarea.
