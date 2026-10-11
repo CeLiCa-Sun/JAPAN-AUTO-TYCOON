@@ -37,4 +37,12 @@ test("high sale price reduces buyers and leaves unsold stock",async({page})=>{
  await expect(panel.getByText(/需要内で完成品を販売/)).toBeVisible();
  await expect(panel.getByText("1基",{exact:true})).toBeVisible();
  await expect(panel.getByText(/累計売上/)).toBeVisible();
+ await expect(panel.getByText(/今月の販売済み：1基/)).toBeVisible();
+ await expect(panel.getByRole("button",{name:"4. 完成品を販売"})).toBeDisabled();
+ await expect(panel.getByText(/翌月に進む、または販売価格を下げる/)).toBeVisible();
+ await page.getByRole("button",{name:"1ヶ月進行"}).click();
+ await expect(panel.getByRole("button",{name:"4. 完成品を販売"})).toBeEnabled();
+ await panel.getByRole("button",{name:"4. 完成品を販売"}).click();
+ await expect(panel.getByText(/需要内で完成品を販売/)).toBeVisible();
+ await expect(panel.getByText("0基",{exact:true})).toBeVisible();
 });
