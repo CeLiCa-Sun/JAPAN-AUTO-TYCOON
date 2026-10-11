@@ -10,7 +10,11 @@ const hold=[p(1500,0.87,5.54),p(2500,2.21,8.44)];
 describe("Robin EY20D separated calibration",()=>{
  it("returns finite train and independent holdout errors",()=>{
   const r=fitPowerScaleHoldout(engine,train,hold);
-  expect(r.scale).toBeGreaterThan(0);
+  expect(r.scale).toBeCloseTo(0.847631,5);
+  expect(r.train.meanAbsolutePercentageError).toBeCloseTo(9.8979,3);
+  expect(r.validation.meanAbsolutePercentageError).toBeCloseTo(16.0890,3);
+  expect(r.train.rootMeanSquaredErrorKw).toBeCloseTo(0.083678,4);
+  expect(r.validation.rootMeanSquaredErrorKw).toBeCloseTo(0.375628,4);
   expect(r.train.count).toBe(3);expect(r.validation.count).toBe(2);
   expect(Number.isFinite(r.validation.rootMeanSquaredErrorKw)).toBe(true);
   expect(r.status).toBe("empirical-scalar-preview");
