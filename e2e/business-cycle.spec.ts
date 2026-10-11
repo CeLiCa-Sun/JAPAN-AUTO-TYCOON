@@ -1,0 +1,21 @@
+import {test,expect} from "@playwright/test";
+test("new business cycle supports capital procurement production sales and payable settlement",async({page})=>{
+ await page.goto("/");
+ const panel=page.getByRole("region",{name:"経営サイクル試作"});
+ await panel.getByRole("button",{name:"1. 新規経営デモ開始"}).click();
+ await expect(panel.getByText(/経営デモを開始しました/)).toBeVisible();
+ await panel.getByRole("button",{name:"2. 部品を発注・納入"}).click();
+ await expect(panel.getByText(/買掛金と仕入原価を計上/)).toBeVisible();
+ await panel.getByRole("button",{name:"3. エンジン製造"}).click();
+ await expect(panel.getByText(/2基を製造/)).toBeVisible();
+ await expect(panel.getByText("2基",{exact:true})).toBeVisible();
+ await panel.getByRole("button",{name:"4. 完成品を販売"}).click();
+ await expect(panel.getByText(/売上・売上原価を計上/)).toBeVisible();
+ await panel.getByRole("button",{name:"5. 仕入代金を支払う"}).click();
+ await expect(panel.getByText(/買掛金を現金で支払いました/)).toBeVisible();
+ await page.reload();
+ await page.getByRole("button",{name:"読み込み",exact:true}).click();
+ await expect(panel.getByText(/買掛金/)).toBeVisible();
+ await expect(panel.getByText("0基",{exact:true})).toBeVisible();
+ await expect(page.getByText("年月：1950-01")).toBeVisible();
+});
