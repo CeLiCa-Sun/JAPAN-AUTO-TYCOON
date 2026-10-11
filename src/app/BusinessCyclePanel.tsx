@@ -30,7 +30,7 @@ export function BusinessCyclePanel({game,onSaved,slot}:{game:GameState;onSaved:(
  const available=game.production?.materials??[];
  const salePriceValid=Number.isSafeInteger(unitSalePrice)&&unitSalePrice>0;
  const market=salePriceValid?estimateEngineMarket(game,unitSalePrice,finished[0]?.remainingQuantity??0):null;
- const nextAction=!game.journals.length?"1. 新規経営デモ開始":finished.length?"4. 完成品を販売":(available.find(m=>m.partId==="block")?.quantity??0)>0?"3. エンジン製造":finance.payable>0?"5. 仕入代金を支払う":"2. 部品を発注・納入";
+ const nextAction=!game.journals.length?"1. 新規経営デモ開始":finished.length?(market?.sellable?"4. 完成品を販売":"翌月に進む、または販売価格を下げる"):(available.find(m=>m.partId==="block")?.quantity??0)>0?"3. エンジン製造":finance.payable>0?"5. 仕入代金を支払う":"2. 部品を発注・納入";
  const apply=async(action:()=>GameState,success:string)=>{
   if(busy)return;
   setBusy(true);
@@ -107,6 +107,8 @@ export function BusinessCyclePanel({game,onSaved,slot}:{game:GameState;onSaved:(
    <h3>販売市場（簡易需要モデル）</h3>
    <p>競合の参考価格：{yen(REFERENCE_PRICE_YEN)} ／ 想定購入需要：{market?.maxBuyers??"-"}基 ／ 月内残需要：{market?.remainingBuyers??"-"}基 ／ 今回販売見込：{market?.sellable??"-"}基 ／ 売れ残り：{market?.unsold??"-"}基</p>
    <p>見込売上：{yen(market?.estimatedRevenueYen??0)}。価格が高いほど需要が減少します。</p>
+   {market&&market.soldThisMonth>0&&<p>今月の販売済み：{market.soldThisMonth}基。月内の需要は販売ごとに減少し、翌月に更新されます。</p>}
+   {finished.length>0&&market?.sellable===0&&<p role="note">この価格では今月の販売枠がありません。販売価格を下げるか、上部の「1ヶ月進行」で翌月へ進めてください。</p>}
   </div>
   <div className="actions">
    <button disabled={busy||!finished.length||!market?.sellable} onClick={()=>void sell()}>4. 完成品を販売</button>
