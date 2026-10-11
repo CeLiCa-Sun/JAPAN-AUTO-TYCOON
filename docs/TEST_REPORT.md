@@ -1,15 +1,13 @@
 # TEST REPORT — 2026-10-11
-## GitHub evidence
-- Inspected prior main head 6b5330d35bdcbf646b01f5b465161adb181640c4 and source.
-- Updated engine research wording so model-derived power is estimatedPowerKw (not measured).
-- Added input integrity validation for RPM domain (500–9000), torque/power arithmetic consistency (5% tolerance) and calibration regression tests.
-## Execution evidence
-- Actual GitHub Actions push job logs: NOT obtained. Available run-by-commit lookup is PR-only, and job log retrieval requires a known job ID.
-- TypeScript/Vite build: NOT executed or verified.
-- Vitest: NOT executed or verified.
-- Playwright Chromium desktop/mobile, Firefox, WebKit: NOT executed or verified.
-- IndexedDB 3-generation, corruption, capacity simulation, legacy import, transaction abort, factory restore: source tests exist but NO verified runs.
-## Gate decision
-Stage 0 remains NOT PASSED. Never infer CI success from committed test cases.
-## Engineering warning
-The measurement integrity checks enforce internal algebra only and DO NOT validate sensor data, engine assumptions or real dyno calibration.
+## Confirmed GitHub operations
+- Inspected head 05cf3389682f35079ff6b8920eca83d2972599d0.
+- Combined commit statuses returned []; commit workflow lookup returned [] and is limited to PR-triggered runs. Neither verifies main push CI.
+- Updated src/storage/atomic.ts to accept historical raw slot:backup after valid modern generations fail.
+- Added e2e/legacy-backup.spec.ts for historical backup recovery and format-2 resave.
+## Test execution
+- Build: NOT RUN / no successful log.
+- Vitest: NOT RUN / no successful log.
+- Playwright Chromium desktop/mobile, Firefox, WebKit: NOT RUN / no successful log.
+- Storage corruption, 3-generation rotation, quota error injection, transaction abort, legacy backup migration, factory restore: test sources committed; browser runs NOT VERIFIED.
+## Stage 0 decision
+NOT PASSED. CI push run/job ID and actual logs still unavailable. Do not infer passing tests from code commits.
