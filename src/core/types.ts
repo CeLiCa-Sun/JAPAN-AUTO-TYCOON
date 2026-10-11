@@ -11,7 +11,7 @@ export interface MaterialCostLot {receiptId:string;partId:string;quantity:number
 export interface PurchaseOrderRecord {id:string;supplierId:string;partId:string;quantity:number;receivedQuantity:number;unitPriceYen:number;orderedYear:number;orderedMonth:number;dueYear:number;dueMonth:number}
 export interface FinishedEngineLot {orderId:string;programId:string;remainingQuantity:number;remainingCostYen:number}
 export interface ProductionState {materials:ProductionInventory[];completedOrders:ProducedEngine[];costLots?:MaterialCostLot[];purchaseOrders?:PurchaseOrderRecord[];finishedLots?:FinishedEngineLot[]}
-export interface GameState { schemaVersion: 1; calendar: GameCalendar; seed: number; companies: Company[]; journals: JournalTransaction[]; completedCommandIds: ID[]; revision: number; production?: ProductionState }
+export interface GameState { schemaVersion: 1; calendar: GameCalendar; seed: number; companies: Company[]; journals: JournalTransaction[]; completedCommandIds: ID[]; revision: number; production?: ProductionState; marketSales?: {month:YearMonth;quantity:number}[] }
 export interface DomainEvent { id: ID; kind: "MonthAdvanced" | "JournalPosted"; commandId: ID; month: YearMonth; payload: Record<string, unknown> }
 export type GameCommand =
   | { id: ID; kind: "AdvanceMonth" }
