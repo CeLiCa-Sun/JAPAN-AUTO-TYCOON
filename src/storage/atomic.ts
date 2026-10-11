@@ -23,3 +23,10 @@ export async function saveAtomic(slot:string,state:GameState):Promise<void>{
  await new Promise<void>((resolve,reject)=>{const tx=db.transaction(STORE,"readwrite");const store=tx.objectStore(STORE);store.put(entry,key(slot,0));previous.forEach((x,i)=>store.put(x,key(slot,i+1)));tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);});
  }finally{db.close();}
 }
+
+export async function recoverBackupGeneration(slot:string):Promise<GameState>{
+ if(!slot.trim())throw new Error("Empty slot");const db=await open();
+ try{for(let i=1;i<MAX;i++){try{const v=await getValue(db,key(slot,i));if(v!==undefined)return await unpack(v);}catch{continue;}}}
+ finally{db.close();}
+ throw new Error("Valid backup generation unavailable");
+}
