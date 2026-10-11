@@ -12,13 +12,13 @@ Status: **Prepared, not deployed.** No validated public playable URL as of 2026-
 1. In GitHub repository `Settings > Pages > Build and deployment`, select `GitHub Actions` as the source. Make sure the account is eligible to publish Pages from this private repository.
 2. Finish the current milestone's CI: TypeScript/Vite, Vitest, Chromium desktop/mobile, Firefox, WebKit.
 3. Examine the full `npm-audit-details` artifact from the test workflow. Remediate vulnerabilities before first public release.
-4. The release workflow `.github/workflows/publish-preview.yml` intentionally blocks deployment on **high or critical** npm advisories. Moderate issues still require manual review and sign-off; absence of a high advisory is not a blanket security guarantee.
+4. The release workflow `.github/workflows/publish-preview.yml` intentionally blocks deployment on **moderate, high or critical** npm advisories. The full audit must pass at the moderate threshold before publication; audit success is not a substitute for code review.
 5. From the GitHub `Actions` tab, select **Publish playable preview (manual)**, then explicitly use **Run workflow** on `main`. Verify that both `verify-and-build` and `publish` jobs succeed.
 6. Obtain the real website link **from the `publish` job's `github-pages` deployment URL** or from `Settings > Pages > Visit site`. Do not guess a link or call the site live before this succeeds.
 
 ## Build details
 - `vite.config.ts` uses `base: "/JAPAN-AUTO-TYCOON/"` in **pages** mode only; development, CI and local tests use `base: "/"`.
-- Release workflow installs Node 22 dependencies, runs blocking `npm audit --audit-level=high`, builds via `npm run build -- --mode pages`, executes all unit tests and the four-project Playwright suite, checks `dist`, uploads only the `dist` artifact, and deploys with least-privilege Pages permissions.
+- Release workflow installs Node 22 dependencies, runs blocking `npm audit --audit-level=moderate`, builds via `npm run build -- --mode pages`, executes all unit tests and the four-project Playwright suite, checks `dist`, uploads only the `dist` artifact, and deploys with least-privilege Pages permissions.
 - The existing CI workflow still captures complete audit JSON and logs severity/range/fix availability without declaring vulnerabilities fixed.
 - `package-lock.json` is **not currently committed**. A reviewed, reproducible lockfile and `npm ci` conversion are recommended as a subsequent dependency-quality checkpoint, but do not invent dependency resolutions.
 
@@ -31,3 +31,9 @@ Status: **Prepared, not deployed.** No validated public playable URL as of 2026-
 - [ ] Only then share the published URL.
 
 References: https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site and https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
+
+## 2026-10-11 hardening update
+- Updated dependency floors to Vite `^7.3.7` and Vitest `^4.1.11` using published security advisories; not yet verified via resolved npm audit or current Actions run.
+- The CI workflow now emits a commit SHA-scoped `JAPAN AUTO TYCOON / CI` status after all quality and audit steps on push; use that plus the actual Actions job logs to verify a release. A missing status is not a pass.
+- Pages deployment has not occurred. Private repository visibility, plan eligibility, Pages source setting and explicit manual workflow dispatch still require the owner's action. Never invent a gameplay URL.
+- Details: `docs/SECURITY_AUDIT.md`.
