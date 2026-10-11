@@ -5,6 +5,7 @@ test("three rolling generations restore the most recent valid backup",async({pag
  await expect(page.getByRole("status")).toContainText("保存しました");
  for(let i=0;i<3;i++){
    await page.getByRole("button",{name:"1ヶ月進行"}).click();
+   await expect(page.getByText(`年月：1950-0${i+2}`)).toBeVisible();
    await expect(page.getByRole("status")).toContainText("自動保存済み");
  }
  await page.getByRole("button",{name:"バックアップ復元"}).click();
@@ -16,6 +17,7 @@ test("corrupt primary and generation 1 recover generation 2",async({page})=>{
  await expect(page.getByRole("status")).toContainText("保存しました");
  for(let i=0;i<2;i++){
   await page.getByRole("button",{name:"1ヶ月進行"}).click();
+  await expect(page.getByText(`年月：1950-0${i+2}`)).toBeVisible();
   await expect(page.getByRole("status")).toContainText("自動保存済み");
  }
  await page.evaluate(async()=>new Promise<void>((resolve,reject)=>{
