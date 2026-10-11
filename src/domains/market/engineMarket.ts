@@ -1,9 +1,12 @@
 import type {GameState} from "../../core/types";
+import {yearMonth} from "../../core/types";
 
 /** Stylized fictional engine market; not historical sales forecasts. */
 export interface MarketEstimate {
  available:number;
  maxBuyers:number;
+ soldThisMonth:number;
+ remainingBuyers:number;
  rivalPriceYen:number;
  referencePriceYen:number;
  priceIndex:number;
@@ -23,8 +26,10 @@ export function estimateEngineMarket(state:GameState,unitPriceYen:number,availab
  const priceIndex=unitPriceYen/referencePriceYen;
  const buyersAtReference=Math.floor(4*yearFactor);
  const maxBuyers=Math.max(0,Math.floor(buyersAtReference*Math.pow(referencePriceYen/unitPriceYen,1.5)));
- const sellable=Math.min(available,maxBuyers);
+ const soldThisMonth=state.marketSales?.find(s=>s.month===yearMonth(state.calendar))?.quantity??0;
+ const remainingBuyers=Math.max(0,maxBuyers-soldThisMonth);
+ const sellable=Math.min(available,remainingBuyers);
  const estimatedRevenueYen=sellable*unitPriceYen;
  if(!Number.isSafeInteger(estimatedRevenueYen))throw new RangeError("Market revenue overflow");
- return {available,maxBuyers,rivalPriceYen,referencePriceYen,priceIndex,sellable,unsold:available-sellable,estimatedRevenueYen,status:"fictional-preview"};
+ return {available,maxBuyers,soldThisMonth,remainingBuyers,rivalPriceYen,referencePriceYen,priceIndex,sellable,unsold:available-sellable,estimatedRevenueYen,status:"fictional-preview"};
 }
