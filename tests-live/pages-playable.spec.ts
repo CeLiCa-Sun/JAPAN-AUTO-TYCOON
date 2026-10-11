@@ -22,6 +22,8 @@ test("deployed browser game can procure, manufacture, sell, save and reload",asy
   await expect(panel.getByText(/買掛金を現金で支払いました/)).toBeVisible();
 
   await page.reload();
+  await expect(page.getByRole("status")).toContainText("前回の経営データを自動復元しました");
+  await expect(page.getByRole("link",{name:"経営サイクルを遊ぶ"})).toBeVisible();
   await page.getByRole("button",{name:"読み込み",exact:true}).click();
   await expect(page.getByRole("status")).toContainText("保存データを読み込みました");
   await expect(panel.getByText("0基",{exact:true})).toBeVisible();
@@ -30,9 +32,17 @@ test("deployed browser game can procure, manufacture, sell, save and reload",asy
 
   await page.getByRole("button",{name:"1ヶ月進行"}).click();
   await expect(page.getByText("年月：1950-02")).toBeVisible();
+  await expect(page.getByRole("status")).toContainText("自動保存済み");
   await page.getByRole("button",{name:"保存",exact:true}).click();
   await expect(page.getByRole("status")).toContainText("保存しました");
   await page.reload();
   await page.getByRole("button",{name:"読み込み",exact:true}).click();
   await expect(page.getByText("年月：1950-02")).toBeVisible();
+  if(page.viewportSize() && page.viewportSize()!.width<600){
+    const preset=panel.getByRole("button",{name:"350,000円"});
+    await preset.click();
+    await expect(preset).toHaveAttribute("aria-pressed","true");
+    await expect(panel.getByRole("spinbutton",{name:/販売単価/})).toHaveValue("350000");
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+  }
 });
