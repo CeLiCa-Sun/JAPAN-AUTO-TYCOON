@@ -1,0 +1,27 @@
+# Phase 2 — accessibility, automatic saves and 125-year test checkpoint
+Date: 2026-10-11
+
+## Source vs deployed release
+- **Still live:** https://celica-sun.github.io/JAPAN-AUTO-TYCOON/
+- **Deployed source SHA:** `fcdb05a39479184cbb7687d970ed18a9ce78059f`. Verified manual Pages run [38117402371](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38117402371): 86 unit tests, 76 local browser E2E, zero audited npm vulnerabilities and 2/2 real-site Chromium desktop/mobile-emulated gameplay and restore.
+- Phase 2 development SHA has **not** been deployed. Main branch changes do not auto-publish. A new manual Pages workflow run is needed after complete green CI.
+
+## Implemented Phase 2 changes
+1. Startup of the default `slot-1` now automatically recovers the latest intact IndexedDB record (or previous valid generation). It waits before enabling the game UI and reports recovery results. Other slots still require manual loading.
+2. Advancing 1, 3, 6 or 12 months now writes with `saveAtomic` before React commits the next state. Failed saves leave the displayed month unchanged, prevent rapid double-advancement, and show the storage error.
+3. Responsive mobile controls: clear navigation to the playable cycle/save manager, full-width gameplay region, >=44px touch-friendly buttons, quantity/price numeric keyboard hints, 350k/420k/900k yen price presets, and a five-stage progress indicator.
+4. Added `tests/long-term-endurance.test.ts` to exercise 1,500 months (125-year deterministic calendar/save replay) and a separate 1,200 months (100-year accounting invariant). This is a **calendar/save/accounting endurance check**, not an 18-stage factory or economy-balance simulation.
+5. Added `e2e/auto-resume-mobile.spec.ts`; rewrote `e2e/multi-tab-save.spec.ts` for auto-saved months and Web Locks checks. Updated `e2e/generations.spec.ts`, `e2e/storage.spec.ts`, `e2e/smoke.spec.ts`, and `e2e/quota.spec.ts` to reflect the new persistence contract.
+
+## Test provenance, do not overstate
+- Initial Phase 2 code CI attempts failed TypeScript compilation due to an unclosed React.StrictMode tag. Fixed in `1351d3371a077271fabec8c15ac88874973f2580`.
+- That version's [CI 38118971035](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38118971035) passed TypeScript/Vite, Vitest **88/88**, Pages-mode build/discovery and audit **0 vulnerabilities**, but failed **17** old Playwright assertions across generations, storage, smoke, and one quota test (68 passed, 3 skipped). They assumed month movement did not autosave, an obsolete behavior after Phase 2. This is a **real CI failure**, not a release pass.
+- Four affected E2E files were corrected at commits `38d50c4e`, `677e17d1`, `b221ac06`, `c9e5a443`; replacement quota test injects a save failure during month advancement and checks that the displayed month remains unchanged.
+- [Follow-up CI 38119188065](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38119188065) tests latest code SHA `c9e5a443598331e110f5e039a7a9a66d1dd56d91`. **PENDING until complete job logs prove a full four-browser E2E pass**. Build, Vitest, Pages-mode build and release-test discovery steps had passed at the last inspection.
+- No new public release, no live physical device verification and no long-term business-economy balance proof.
+
+## Release requirements
+- Exact code-changing SHA has a successful real GitHub Actions CI with build + **all** unit tests + complete Chromium desktop/mobile, Firefox, WebKit E2E and npm moderate-or-higher audit gate.
+- Owner manually triggers `Publish playable preview` on `main`.
+- Job must validate deployed HTML release SHA and pass the real HTTPS Playwright desktop/mobile tests for business operations and save/reload.
+- Actual physical iPhone/Android testing is an additional separate check.
