@@ -215,3 +215,10 @@ Continue to show multi-select checkboxes and additional-request textarea.
 - Check the automatic CI run specifically for the new workflow SHA before declaring new HEAD green.
 - Owner enables Pages + selects Actions as source; only then initiate **one manual** gated release and verify actual web URL.
 - Recheck npm audit on future package changes; treat `0` as the verified 2026-10-11 dependency snapshot only.
+
+## Immediate handoff (verified security; manual Pages configuration required)
+- Real green CI evidence: run `38114679080`, tested code SHA `344bf28f`: Node 22 npm ci, Vite build, Vitest **86/86**, Playwright **76/76**, npm audit **0 vulnerabilities**. Tracked npm v3 package-lock is present; this is a precise snapshot.
+- Actual Pages release attempt `38114576750`: verify-and-build succeeded; publish failed because GitHub Pages API returned **404 / site not enabled**. The host URL is **not verified**. Private repository requires eligible GitHub plan and admin source selection.
+- Workflow fix: .github/workflows/publish-preview.yml is now **manual-only** and checks Pages settings first. Do not add `enablement:true` using standard GITHUB_TOKEN: official action requires a separate elevated token. Do not change private/public repo visibility without owner decision.
+- Security/CI hardening: .github/workflows/ci.yml uses only pinned tracked `package-lock.json` + `npm ci`; removed privileged bot lock auto-commit; write access only for status; `paths-ignore` skips docs/** and README.md changes on pushes. Current workflow/docs-only commits after `344bf28f` are **not certified** by the earlier run. User CI cadence is stage boundary, not every docs commit.
+- **Owner action to publish:** in GitHub go to repo `Settings > Pages > Build and deployment`, select **GitHub Actions**, confirm the private repository Pages entitlement; then `Actions > Publish playable preview > Run workflow`. Verify green publish and real live HTML/JS smoke before giving a playable URL.
