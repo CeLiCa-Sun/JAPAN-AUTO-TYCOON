@@ -1,11 +1,11 @@
 # JAPAN AUTO TYCOON — GitHub Pages 公開に必要な操作
 
 **確認日:** 2026-10-11
-**公開状況:** 未公開。非公開リポジトリ `CeLiCa-Sun/JAPAN-AUTO-TYCOON` で Pages が未設定。前回の公開ジョブ `38114576750` は `actions/configure-pages@v5` の HTTP 404 で失敗。設定を変更する外部権限は現在の GitHub 接続にないため、管理者の操作が必要。
+**公開状況:** リポジトリは **Public（公開）** と確認済み。ただし Pages のサイト公開は未確認。前回の公開ジョブ `38114576750` は `actions/configure-pages@v5` の HTTP 404 で失敗。現在の接続から Pages 設定変更・手動ワークフロー実行はできないため管理者操作が必要。
 
 ## ユーザーの必須操作（GitHub）
 1. [リポジトリの Pages 設定](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/settings/pages) を開く。
-2. **Build and deployment → Source → GitHub Actions** を選択して設定する（既に設定済みならそのまま）。Pages項目自体が利用できない場合、GitHubの契約プランを確認する。GitHub FreeのプライベートリポジトリからはPagesを公開できず、GitHub Pro／Team／Enterprise等が必要。リポジトリは勝手に公開状態へ変更しない。
+2. **Build and deployment → Source → GitHub Actions** を選択して設定する（既に設定済みならそのまま）。現在のリポジトリは Public なので、通常は GitHub Free でも Pages を利用できる。設定項目が見当たらない場合はリポジトリの管理権限とサイト公開設定を確認する。公開済みであることと Pages サイトが稼働していることは別。
 3. [Actions](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions) で **Publish playable preview** を選び、**Run workflow → main → Run workflow** を実行する。
 4. `verify-and-build` と `publish` の両ジョブが成功したことを確認。GitHub設定の `Pages → Visit site` かジョブ `deployment.outputs.page_url` から初めて共有用URLを取得する。
 5. 失敗した場合は、**失敗した Actions の実行URL**を次回の依頼に貼る。未設定／権限問題は無理にCIの制限を迂回しない。
@@ -18,4 +18,9 @@
 - [GitHub公式 プラン要件](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site)
 
 ## 注意
-GitHub Pagesで公開すると、元のリポジトリがプライベートでも、通常は公開したウェブコンテンツがインターネットから閲覧可能。公開操作は自分の意思で実施する。パス、URL、CI成功表示を推測だけで共有しない。
+リポジトリは既に Public。Pagesで公開するとサイトの静的アセットも一般に閲覧可能になる。公開操作は自分の意思で実施する。パス、URL、CI成功表示を推測だけで共有しない。
+
+## 2026-10-11 追加状況
+- GitHub連携の `get_repo` が `visibility: public` を返したことを確認。公開URLは現在も実稼働未確認。
+- `.github/workflows/publish-preview.yml` の事前検証で落ちた場合も、コミットの `JAPAN AUTO TYCOON / Pages` に失敗ステータスと実行URLを残す改善を追加。公開ワークフローは `workflow_dispatch` のみ。
+- Pages設定後に **Publish playable preview** を手動実行し、公開済みのHTMLとJavaScript、PC・スマホ相当のChromiumで経営サイクルとIndexedDBセーブの復元を確認する。
