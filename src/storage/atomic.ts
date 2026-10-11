@@ -19,8 +19,8 @@ export async function saveAtomic(slot:string,state:GameState):Promise<void>{
  if(!slot.trim())throw new Error("Empty slot");const entry=await pack(state);const db=await open();
  try{
  const previous:Envelope[]=[];
- for(let i=0;i<MAX-1;i++){const value=await getValue(db,key(slot,i));if(value===undefined)break;try{previous.push(await pack(await unpack(value)));}catch{try{validateGameState(value);previous.push(await pack(value));}catch{break;}}}
- await new Promise<void>((resolve,reject)=>{const tx=db.transaction(STORE,"readwrite");const store=tx.objectStore(STORE);store.put(entry,key(slot,0));previous.forEach((x,i)=>store.put(x,key(slot,i+1)));tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);});
+ for(let i=0;i<MAX-1;i++){const value=await getValue(db,key(slot,i));if(value===undefined)continue;try{previous.push(await pack(await unpack(value)));}catch{try{validateGameState(value);previous.push(await pack(value));}catch{continue;}}}
+ await new Promise<void>((resolve,reject)=>{const tx=db.transaction(STORE,"readwrite");const store=tx.objectStore(STORE);store.put(entry,key(slot,0));previous.forEach((x,i)=>store.put(x,key(slot,i+1)));for(let i=previous.length+1;i<MAX;i++)store.delete(key(slot,i));tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);});
  }finally{db.close();}
 }
 
