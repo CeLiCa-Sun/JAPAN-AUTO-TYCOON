@@ -1,6 +1,6 @@
 # JAPAN AUTO TYCOON — プレイ試作ガイド (2026-10-11)
 
-> **公開済みのプレイ試作版:** https://celica-sun.github.io/JAPAN-AUTO-TYCOON/ （公開SHA `fcdb05a39479184cbb7687d970ed18a9ce78059f`）。[Pages実行 38117402371](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38117402371) でビルド、Vitest 86/86、4ブラウザE2E 76/76、npm監査0件、公開先HTML・JS、実サイトでのChromium PC/スマホ相当E2E 2/2合格を確認。スマホはエミュレーションであり実機ではありません。完成版ではありません。
+> **Phase 2公開済みのプレイ試作版:** https://celica-sun.github.io/JAPAN-AUTO-TYCOON/ （公開SHA `4cffad1e30bf5f478e40f7d7f7f89487e07cee71`）。[Pages実行 38119727017](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38119727017) でVitest **88/88**、4ブラウザE2E **85件合格・3件スキップ**、npm監査 **0件**、実公開サイトのChromium PC/スマホ相当のセーブ復元・経営操作テスト **2/2合格**。スマホはエミュレーションであり実機ではありません。完成版ではありません。
 
 ## Start locally
 1. Install Node.js 22 and use `npm ci` (lockfile committed and audited).
@@ -8,10 +8,11 @@
 3. With a fresh save state, find **経営サイクル（プレイ試作）** and press **1. 新規経営デモ開始**.
 4. Choose 1–10 engines, press **2. 部品を発注・納入**, then **3. エンジン製造**.
 5. Set the price in yen, inspect fictional demand, press **4. 完成品を販売**, and **5. 仕入代金を支払う**.
-6. To keep playing after a refresh, press **読み込み** in the save section. Automatic saves occur after each successful business-cycle operation.
-7. If starting with old data or another open tab, explicitly load the most recent save. Conflicting writes are rejected in supported cases.
+6. The default `slot-1` automatically restores on reopening or refresh; you no longer need to press **読み込み** for that slot. Month progression and successful business-cycle operations are automatically saved. Use **読み込み** for other slots.
+7. When changing to another slot or resolving conflicts between tabs, use **読み込み** to refresh the active state. Outdated competing writes are rejected in supported cases.
 
 ## Current playable scope
+- Phase 2: startup auto-restore for slot-1; atomic month autosaves, mobile shortcut navigation, touch-friendly controls, price presets, five-stage progress guide.
 - Initial demo equity 10,000,000 yen; suppliers instant deliver at fixed preview prices; stored supplier purchase orders and liability postings.
 - Input BOM: 1 engine block + 4 pistons per engine; FIFO material costs, WIP and finished goods; production overhead credited to cash.
 - Fictional demand responds to player unit price; rival benchmark is 450,000 yen/unit and same-month sales consume finite modeled buyer capacity.
@@ -28,16 +29,15 @@
 - Existing `FactoryPanel` is an independent legacy demo. Its seeded inventory cannot be mixed into the new procured-cost flow.
 
 ## 公開試作版の検証記録（2026-10-11）
-- [x] 公開SHA `fcdb05a39479184cbb7687d970ed18a9ce78059f` の TypeScript/Vite Pages ビルド成功
-- [x] Vitest **86/86** 成功
-- [x] Chromium desktop/mobile、Firefox、WebKitの E2E **76/76** 成功
-- [x] `npm audit --audit-level=moderate` で脆弱性 **0件**
-- [x] Pages の公開HTML・JavaScript取得、配布コミットSHA照合成功
-- [x] 公開HTTPSサイト上のChromium desktop・Pixel 7相当エミュレーションで、仕入→製造→販売→決済→再読込とセーブ復元 **2/2** 成功
-- [ ] 物理的なPC・iPhone・Androidでの手動実機確認
-- [ ] 正式版の18工程・NPC経営・経済長期バランス検証
+- [x] Pages公開SHA `4cffad1e30bf5f478e40f7d7f7f89487e07cee71`、配布HTMLのSHAとJSを実確認
+- [x] Vitest 88/88
+- [x] ローカル4ブラウザE2E：85合格・3スキップ
+- [x] npm audit 0件
+- [x] 公開URLでPC/スマホ相当Chromium 2/2：新UI、経営サイクル、起動時自動復元、月次自動保存・再読込、価格候補
+- [ ] 物理PC・iPhone・Androidでの手動確認
+- [ ] 長期実経済バランス、NPC経営、実際の18工程の完全実装・検証
 
-最新の裏付けは [RELEASE_VERIFICATION.md](RELEASE_VERIFICATION.md)。`main` の後続コミットは再公開するまで実際の公開版には反映されません。
+[最新版公開証拠](RELEASE_VERIFICATION.md)。GitHub `main` の後続文書コミットは公開ソースSHAと区別します。
 
 ## Latest verified CI milestone
 - [38114198670](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38114198670): build PASS, 86/86 unit PASS, 76/76 desktop/mobile E2E PASS, npm audit 0 findings.
