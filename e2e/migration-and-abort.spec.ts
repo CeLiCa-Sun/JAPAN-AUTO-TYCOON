@@ -13,9 +13,10 @@ test("reads legacy schemaVersion 1 save and migrates on next write",async({page}
  await page.getByRole("button",{name:"読み込み",exact:true}).click();
  await expect(page.getByText("年月：1960-06")).toBeVisible();
  await page.getByRole("button",{name:"保存",exact:true}).click();
+ await expect(page.getByRole("status")).toContainText("保存しました");
  const result=await page.evaluate(async()=>new Promise<{format:number;year:number}>((resolve,reject)=>{
   const o=indexedDB.open("japan-auto-tycoon",1);o.onerror=()=>reject(o.error);
-  o.onsuccess=()=>{const db=o.result,tx=db.transaction("saves","readonly"),q=tx.objectStore("saves").get("slot-1");q.onsuccess=()=>{resolve({format:q.result.format,year:q.result.payload.calendar.year});db.close();};q.onerror=()=>reject(q.error);};
+  o.onsuccess=()=>{const db=o.result,tx=db.transaction("saves","readonly"),q=tx.objectStore("saves").get("slot-1");q.onsuccess=()=>{resolve({format:q.result.format,year:q.result.payload.calendar.year});};q.onerror=()=>reject(q.error);tx.oncomplete=()=>db.close();};
  }));
  expect(result).toEqual({format:2,year:1960});
 });
@@ -27,7 +28,7 @@ test("aborted IndexedDB write does not damage committed primary",async({page})=>
   await new Promise<void>((resolve,reject)=>{
    const o=indexedDB.open("japan-auto-tycoon",1);
    o.onerror=()=>reject(o.error);
-   o.onsuccess=()=>{const db=o.result,tx=db.transaction("saves","readwrite");tx.objectStore("saves").put({format:2,digest:"invalid",payload:{}}, "slot-1");tx.abort();tx.onabort=()=>{db.close();resolve();};tx.onerror=()=>{db.close();reject(tx.error);};};
+   o.onsuccess=()=>{const db=o.result,tx=db.transaction("saves","readwrite");tx.objectStore("saves").put({format:2,digest:"invalid",payload:{}}, "slot-1");tx.abort();tx.onabort=()=>{db.close();resolve();};tx.onerror=()=>{/* abort also emits error; onabort handles expected rollback */};};
   });
  });
  await page.getByRole("button",{name:"読み込み",exact:true}).click();
