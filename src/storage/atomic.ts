@@ -18,7 +18,16 @@ export async function recoverAtomic(slot:string):Promise<{state:GameState|null;g
  const prior=await getValue(db,slot+":backup");if(prior!==undefined){try{validateGameState(prior);return {state:prior,generation:MAX,legacy:true};}catch{/* invalid legacy contents */}}
  return {state:null,generation:null,legacy:false};}finally{db.close();}
 }
-export async function saveAtomic(slot:string,state:GameState):Promise<void>{
+const pendingSaves=new Map<string,Promise<void>>();
+/** Serialize overlapping saves for a slot within this tab. Cross-tab coordination remains future work. */
+export function saveAtomic(slot:string,state:GameState):Promise<void>{
+ const prior=pendingSaves.get(slot)??Promise.resolve();
+ const queued=prior.catch(()=>undefined).then(()=>saveAtomicUnchecked(slot,state));
+ pendingSaves.set(slot,queued);
+ void queued.finally(()=>{if(pendingSaves.get(slot)===queued)pendingSaves.delete(slot);}).catch(()=>undefined);
+ return queued;
+}
+async function saveAtomicUnchecked(slot:string,state:GameState):Promise<void>{
  if(!slot.trim())throw new Error("Empty slot");const entry=await pack(state);const db=await open();
  try{
  const previous:Envelope[]=[];
