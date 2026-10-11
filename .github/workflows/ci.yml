@@ -21,8 +21,8 @@ jobs:
       - name: Unit tests
         run: npm test
       - name: Install Chromium
-        run: npx playwright install --with-deps chromium
-      - name: Desktop and mobile E2E
+        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Chromium desktop/mobile and Firefox/WebKit E2E
         run: npm run test:e2e
       - name: Upload Playwright artifacts on failure
         if: failure()
