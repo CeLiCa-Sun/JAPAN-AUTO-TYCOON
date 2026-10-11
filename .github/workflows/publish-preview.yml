@@ -1,11 +1,8 @@
 name: Publish playable preview
 
-# One-time owner-requested Phase 2 release: ONLY the explicit release commit
-# may deploy from push. Return to workflow_dispatch-only after verification.
+# Publishing remains an explicit action in the GitHub Actions tab.
+# One-time Phase 2 push release was requested and executed in run 38119727017.
 on:
-  push:
-    branches: [main]
-    paths: ['.github/workflows/publish-preview.yml']
   workflow_dispatch:
 
 permissions:
@@ -17,7 +14,6 @@ concurrency:
 
 jobs:
   verify-and-build:
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.head_commit.message, 'release(phase2):')
     runs-on: ubuntu-latest
     timeout-minutes: 25
     permissions:
