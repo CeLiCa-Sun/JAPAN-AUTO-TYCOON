@@ -26,6 +26,6 @@ export function receivePurchasedParts(state:GameState,order:PurchaseOrder,receiv
  const totalQuantity=(old?.quantity??0)+received;
  if(!Number.isSafeInteger(totalQuantity))throw new RangeError("Stock overflow");
  const materials=old?previous.map(m=>m.partId===order.partId?{...m,quantity:totalQuantity}:m):[...previous,{partId:order.partId,quantity:received}];
- const result:GameState={...posted,production:{materials,completedOrders:posted.production?.completedOrders??[]}};
+ const result:GameState={...posted,production:{materials,completedOrders:posted.production?.completedOrders??[],costLots:[...(posted.production?.costLots??[]),{receiptId:order.id,partId:order.partId,quantity:received,unitCostYen:order.unitPriceYen}]}};
  validateGameState(result);return result;
 }
