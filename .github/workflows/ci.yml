@@ -68,14 +68,36 @@ jobs:
         if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           if git ls-files --error-unmatch package-lock.json > /dev/null 2>&1; then
-            echo 'Committed lockfile already present; no changes.'
+            echo 'A versioned lockfile already exists.'
             exit 0
           fi
+          cp package-lock.json /tmp/jat-tested-package-lock.json
+          manifest_sha="$(sha256sum package.json | cut -d' ' -f1)"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add package-lock.json
-          git commit -m 'chore(deps): preserve audited and tested npm lockfile [skip ci]'
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            latest_manifest="$(git show FETCH_HEAD:package.json | sha256sum | cut -d' ' -f1)"
+            if [ "$manifest_sha" != "$latest_manifest" ]; then
+              echo 'package.json changed after testing; refusing to commit a stale lockfile.'
+              exit 1
+            fi
+            if git cat-file -e FETCH_HEAD:package-lock.json 2>/dev/null; then
+              echo 'A lockfile was already committed by another writer.'
+              exit 0
+            fi
+            git checkout -B verified-lockfile FETCH_HEAD
+            cp /tmp/jat-tested-package-lock.json package-lock.json
+            git add package-lock.json
+            git commit -m 'chore(deps): preserve audited and tested npm lockfile [skip ci]'
+            if git push origin HEAD:main; then
+              echo 'Verified lockfile committed to the latest main.'
+              exit 0
+            fi
+            echo "Retrying lockfile push ($attempt)..."
+            sleep 2
+          done
+          exit 1
       - name: Publish phase CI status for SHA-based verification
         if: always() && github.event_name == 'push'
         continue-on-error: true
