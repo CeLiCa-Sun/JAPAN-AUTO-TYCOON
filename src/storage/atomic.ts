@@ -13,7 +13,10 @@ export async function recoverAtomic(slot:string):Promise<{state:GameState|null;g
  try{for(let i=0;i<MAX;i++){let value:unknown;try{value=await getValue(db,key(slot,i));}catch{continue;}if(value===undefined)continue;
  try{const state=await unpack(value);return {state,generation:i,legacy:false};}
  catch{if(i===0){try{validateGameState(value);return {state:value,generation:0,legacy:true};}catch{/* try backup */}}}
- }return {state:null,generation:null,legacy:false};}finally{db.close();}
+ }
+ // Older backup.ts stored an unwrapped backup at slot+":backup". Recover it only after modern generations fail.
+ try{const prior=await getValue(db,slot+":backup");if(prior!==undefined){validateGameState(prior);return {state:prior,generation:MAX,legacy:true};}}catch{/* no valid old backup */}
+ return {state:null,generation:null,legacy:false};}finally{db.close();}
 }
 export async function saveAtomic(slot:string,state:GameState):Promise<void>{
  if(!slot.trim())throw new Error("Empty slot");const entry=await pack(state);const db=await open();
