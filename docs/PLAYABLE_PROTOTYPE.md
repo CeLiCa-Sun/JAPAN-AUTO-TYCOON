@@ -1,6 +1,6 @@
 # JAPAN AUTO TYCOON — プレイ試作ガイド (2026-10-11)
 
-> Status: code committed, **current SHA not yet verified by the full CI matrix**. Historical Stage 0 success does not certify these features.
+> Status: the playable prototype code at tested SHA **344bf28f** passed CI run **38114679080**: build, Vitest 86/86, four-browser E2E 76/76, npm audit 0. Later workflow/documentation commits require their own checks. Public GitHub Pages deployment failed due to missing site settings; no live URL yet.
 
 ## Start locally
 1. Install Node.js 22 and use `npm ci` (lockfile committed and audited).
