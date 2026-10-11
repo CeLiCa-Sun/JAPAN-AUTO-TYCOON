@@ -1,6 +1,6 @@
 # IMPLEMENTATION STATUS — 2026-10-11
-- Stage 0: **NOT PASSED**; build/unit/E2E execution proof absent.
-- CI: push workflow configured; connector's PR-only lookup returns no run, private repo cannot be cloned from this runtime (github.com DNS unavailable).
-- Save: SHA-256 3-generation backups, corruption/migration/abort/quota tests and new production snapshot recovery E2E test exist. Runtime unverified.
-- Factory: persisted production demo and balanced journal; fixed capital journal to current month and disabled controls during save. Tests unexecuted.
-- Missing: authenticated push-run CI job IDs, actual test logs, full cross-browser results; factory capacity, procurement, finished goods accounting and real economy integration.
+- Stage 0 gate: NOT PASSED / no passing CI build, Vitest or Playwright proof.
+- Save: 3-generation SHA-256 IndexedDB and corruption/quota/legacy/abort/factory restore tests committed; no verified browser execution.
+- Engine thermal: total rejected heat distinguished from presumed coolant heat fraction; uncalibrated heuristic and new tests authored, NOT executed.
+- Engineering: combustion, knock and durability remain provisional; empirical full RPM dyno calibration absent.
+- Manufacturing: opt-in factory demo stores work orders/inventory/ledger, but real factory capacity/procurement not integrated.
