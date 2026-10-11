@@ -6,6 +6,7 @@ import {exportSave,importSave} from "./storage/backup";
 import {Dashboard} from "./app/Dashboard";
 import {EngineDesigner} from "./app/EngineDesigner";
 import {FactoryPanel} from "./app/FactoryPanel";
+import {BusinessCyclePanel} from "./app/BusinessCyclePanel";
 import {saveAtomic,recoverAtomic,recoverBackupGeneration} from "./storage/atomic";
 import "./style.css";
 function App(){
@@ -27,8 +28,9 @@ function App(){
  <section><h2>セーブ管理</h2><label>スロット名 <input value={slot} onChange={e=>setSlot(e.target.value)} /></label><div className="actions"><button onClick={save}>保存</button><button onClick={load}>読み込み</button><button onClick={restore}>バックアップ復元</button><button onClick={exportJson}>JSON出力</button></div><label>JSON取り込み <input type="file" accept=".json,application/json" onChange={e=>void importJson(e.target.files?.[0]??null)} /></label><p role="status">{status}</p></section>
  <Dashboard game={game}/>
  <EngineDesigner/>
+ <BusinessCyclePanel game={game} onSaved={setGame} slot={slot}/>
  <FactoryPanel game={game} onSaved={setGame} slot={slot}/>
- <section><h2>未実装・制約</h2><p>工場・市場・NPC企業・レース・税務・実車走行は未実装。月次進行はカレンダー主体で、経営イベントとの完全連動は未完成です。</p></section>
+ <section><h2>未実装・制約</h2><p>18工程の時間進行・市場需要・NPC企業・レース・税務・実車走行は未実装。月次進行はカレンダー主体で、経営イベントとの完全連動は未完成です。</p></section>
  </main></div>;
 }
 createRoot(document.getElementById("root")!).render(<React.StrictMode><App/></React.StrictMode>);
