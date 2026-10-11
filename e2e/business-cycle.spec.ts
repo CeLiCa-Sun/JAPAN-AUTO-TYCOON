@@ -19,3 +19,20 @@ test("new business cycle supports capital procurement production sales and payab
  await expect(panel.getByText("0基",{exact:true})).toBeVisible();
  await expect(page.getByText("年月：1950-01")).toBeVisible();
 });
+
+test("high sale price reduces buyers and leaves unsold stock",async({page})=>{
+ await page.goto("/");
+ const panel=page.getByRole("region",{name:"経営サイクル試作"});
+ await panel.getByRole("button",{name:"1. 新規経営デモ開始"}).click();
+ await expect(panel.getByText(/経営デモを開始しました/)).toBeVisible();
+ await panel.getByRole("button",{name:"2. 部品を発注・納入"}).click();
+ await expect(panel.getByText(/買掛金と仕入原価を計上/)).toBeVisible();
+ await panel.getByRole("button",{name:"3. エンジン製造"}).click();
+ await expect(panel.getByText(/2基を製造/)).toBeVisible();
+ await panel.getByRole("spinbutton",{name:/販売単価/}).fill("900000");
+ await expect(panel.getByText(/売れ残り：1基/)).toBeVisible();
+ await panel.getByRole("button",{name:"4. 完成品を販売"}).click();
+ await expect(panel.getByText(/需要内で完成品を販売/)).toBeVisible();
+ await expect(panel.getByText("1基",{exact:true})).toBeVisible();
+ await expect(panel.getByText(/累計売上/)).toBeVisible();
+});
