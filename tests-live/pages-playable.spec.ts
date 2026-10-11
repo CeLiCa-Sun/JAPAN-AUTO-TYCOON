@@ -4,6 +4,9 @@ test("deployed browser game can procure, manufacture, sell, save and reload",asy
   const url=process.env.PLAYWRIGHT_LIVE_URL!;
   const response=await page.goto(url,{waitUntil:"domcontentloaded"});
   expect(response?.ok()).toBe(true);
+  const expectedSha=process.env.PLAYWRIGHT_LIVE_SHA;
+  if(!expectedSha)throw new Error("PLAYWRIGHT_LIVE_SHA required for release acceptance");
+  await expect(page.locator('meta[name="jat-release-sha"]')).toHaveAttribute("content",expectedSha);
   await expect(page.getByText("JAPAN AUTO TYCOON",{exact:true})).toBeVisible();
   const panel=page.getByRole("region",{name:"経営サイクル試作"});
   await expect(panel.getByText("初回プレイガイド")).toBeVisible();
