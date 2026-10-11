@@ -1,7 +1,7 @@
 # Dependency security review — 2026-10-11
 
 ## Status
-**Partially remediated in package ranges; NOT independently verified by a fresh npm audit or current Actions log.** Never represent this as zero advisories. The real dependency graph has no committed `package-lock.json` and the development environment cannot resolve `registry.npmjs.org` (DNS error), so resolved package versions and exact remaining advisories are presently unknown.
+**Verified for the locked CI dependency snapshot.** GitHub Actions run `38114679080` (tested SHA `344bf28f`, job `114397110245`) passed `npm ci`, build, 86 Vitest, 76 Playwright and reported `npm audit`: **0 vulnerabilities**. The npm lockfile is committed to `main`. Historic uncertainty below is preserved for context; future dependency changes must be reaudited.
 
 ## What changed
 - `vite`: `^7.1.0` -> `^7.3.7` (stay on Vite major 7, which continues to receive security fixes).
