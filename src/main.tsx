@@ -59,4 +59,4 @@ function App(){
  <section><h2>未実装・制約</h2><p>18工程の時間進行・実際の顧客市場・NPC企業の独立経営・レース・税務・実車走行は未実装。簡易需要モデルはゲーム内の仮定値です。月次進行はカレンダー主体で、経営イベントとの完全連動は未完成です。</p></section>
  </main></div>;
 }
-createRoot(document.getElementById("root")!).render(<React.StrictMode><App/>);
+createRoot(document.getElementById("root")!).render(<React.StrictMode><App/></React.StrictMode>);
