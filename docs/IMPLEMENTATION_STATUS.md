@@ -1,5 +1,8 @@
 # IMPLEMENTATION STATUS — 2026-10-11
 
+**現行の最新公開判定（2026-10-11）：** GitHub Pages [プレイURL](https://celica-sun.github.io/JAPAN-AUTO-TYCOON/) は Phase 2 を **SHA `4cffad1e30bf5f478e40f7d7f7f89487e07cee71`** で公開済み。 [Pages run 38119727017](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38119727017) の `verify-and-build` と `publish` が両方 SUCCESS、Vitest **88/88**、4ブラウザE2E **85合格・3スキップ・0失敗**、npm audit **0件**、公開HTML/JSとSHA検証、および公開サイトのChromium PC/スマホ相当（Pixel 7エミュレーション）ライブテスト **2/2合格**。自動復元・月次自動保存・モバイル価格候補もライブで確認。後続の [CI 38120046383](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38120046383) もSUCCESSだが**再公開を意味しない**。公開ワークフローは一時push起動から **`workflow_dispatch` 手動専用に戻した**。物理iPhone/Android/PCでの手動試験、およびNPC競争・本格18工程・経済の長期バランス検証は未実施・未完成。以前の「未公開」「CI実行中」「SHA fcdb05a」は履歴であり現行状態ではない。根拠： [docs/RELEASE_VERIFICATION.md](RELEASE_VERIFICATION.md)。
+
+
 **RELEASE VERIFIED — 2026-10-11:** [公開プレイ版](https://celica-sun.github.io/JAPAN-AUTO-TYCOON/) は GitHub Pages 手動実行 [38117402371](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38117402371) で公開済み。**公開対象SHAは `fcdb05a39479184cbb7687d970ed18a9ce78059f`**。`verify-and-build` (job `114404945279`): npm audit 0件、Vitest 86/86、4ブラウザE2E 76/76、Pagesビルド合格。`publish` (job `114405308261`): Pages設定・デプロイ成功、実URLのHTML/JS取得とSHA照合成功、**実サイト上のPC/スマホ相当のChromium Playwright 2/2合格**（経営サイクル・IndexedDBセーブ/リロード）。スマホはエミュレーションであり実機ではない。旧記述の「未公開・Pages 404・実テスト未実施」は**過去の段階の履歴**であり現状を表さない。証拠の詳細: [`docs/RELEASE_VERIFICATION.md`](RELEASE_VERIFICATION.md)。後続のドキュメントのみのコミットは新たなゲーム公開を意味しない。
 
 
