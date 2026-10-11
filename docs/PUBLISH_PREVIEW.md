@@ -98,3 +98,8 @@ See `docs/PLAYABLE_PROTOTYPE.md` for gameplay controls and known limitations.
 - Other existing browser E2E: Chromium desktop/mobile + Firefox + WebKit via CI; Vitest + npm audit moderate+ blocking. The latest exact new code SHA must have its own passing CI to qualify. **Stamped release + live gameplay tests have NOT been executed on a public site**.
 - GitHub Actions latest inspected collection initially showed new build runs pending for `24762091`, `679a52a4`, `7706ff47`, `8ff9cfc`, with the last confirmed prior run `38116832464` for `defb4969` reporting success. Do not mark pending runs passed until their job conclusions and logs are verified.
 - Status contract: report old successful CI at its SHA separately from new SHA tests; do not share any guessed Pages URL.
+
+## 2026-10-11 — verified stamped-Pages build (new evidence)
+- Latest verified green run: [38117046702](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38117046702), tested SHA **7706ff470b481db4cf3a6e87750f28f2b88e5cd7**. Build PASS, 28 Vitest suites **86/86 PASS**, 4-browser Playwright **76/76 PASS**, npm audit **0 vulnerabilities**, Pages-mode asset check and `Pages HTML stamped for commit 7706...` PASS, two live-only tests discovered (not run against a real site).
+- `tests-live/pages-playable.spec.ts` received an additional exact-SHA live assertion in SHA **8ff9cfcbe64fd7dc9ba3d3f1aad14827f747a773**. Its CI run **38117054703** was still in progress at the latest check. Treat it as UNVERIFIED pending a complete run; do not transfer 7706 PASS to it.
+- Actions run collection showed **no new manual Pages publication** after old Pages failed run **38114576750**. A publicly playable URL and actual desktop/mobile save/reload results remain unverified.
