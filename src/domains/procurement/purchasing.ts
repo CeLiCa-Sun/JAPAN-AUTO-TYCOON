@@ -2,7 +2,6 @@ import type {GameState,JournalTransaction} from "../../core/types";
 import {yearMonth} from "../../core/types";
 import {validateGameState} from "../../core/validation";
 import {dispatch} from "../../core/reducer";
-import type {PartSpec} from "../engine/manufacturing";
 export interface SupplierQuote {supplierId:string;partId:string;unitPriceYen:number;leadMonths:number;minimumOrderQuantity:number}
 export interface PurchaseOrder {id:string;supplierId:string;partId:string;quantity:number;unitPriceYen:number;orderedYear:number;orderedMonth:number;dueYear:number;dueMonth:number}
 const positive=(x:number)=>Number.isSafeInteger(x)&&x>0;
