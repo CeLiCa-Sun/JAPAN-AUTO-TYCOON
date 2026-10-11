@@ -1,5 +1,5 @@
 # IMPLEMENTATION STATUS — 2026-10-11
-- Stage 0: NOT PASSED. No authenticated Actions push-run logs or build/unit/E2E pass evidence.
-- Storage: 3 generation SHA-256 recovery, legacy fallback, quota/abort/corrupt/read-failure/factory test sources exist. Unverified in browsers.
-- Engine: added research thermal loss, assumed coolant demand, friction and exponential failure-risk estimate, with unit tests. Model explicitly uncalibrated; no real dyno fit.
-- Engine manufacturing/accounting: prior demo implementation remains provisional.
+- Stage 0: NOT PASSED; actual build/Vitest/Playwright success and Actions push run logs unavailable.
+- Save QA: 3-generation, corruption, legacy format, simulated quota, aborted transaction, read error and production restoration test sources exist, unverified in real cross-browser execution.
+- Engine calibration: RMSE kW and signed bias kW added to percentage errors; duplicate RPM rejected. Still no matched actual dyno curve and no fitted model.
+- Engine heat/friction/knock/longevity and factory production remain heuristic/prototype.
