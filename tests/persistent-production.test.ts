@@ -19,5 +19,11 @@ describe("Persistent engine work order",()=>{
   expect(()=>manufactureEngines(next,program,"factory-1",2,bom,2,1000,98)).toThrow();
  });
  it("rejects shortage without mutating state",()=>{const base=funded();expect(()=>manufactureEngines(base,program,"x",6,bom,6,1000,98)).toThrow();expect(base.production?.materials[0].quantity).toBe(5);});
+ it("refuses untracked procured materials instead of duplicating inventory value",()=>{
+  const base=funded();
+  const purchased={...base,journals:[...base.journals,{id:"purchase:po-1",companyId:"player",month:"1950-01" as const,description:"Received parts",entries:[{account:"inventory" as const,debit:3000,credit:0},{account:"payable" as const,debit:0,credit:3000}]}]};
+  expect(()=>manufactureEngines(purchased,program,"unsafe",1,bom,1,1000,98)).toThrow(/inventory provenance/);
+  expect(purchased.production?.completedOrders).toHaveLength(0);
+ });
  it("preserves legacy states without production property",()=>expect(()=>validateGameState(initialState())).not.toThrow());
 });
