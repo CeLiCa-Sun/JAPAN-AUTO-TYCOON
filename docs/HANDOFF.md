@@ -4,3 +4,8 @@ New src/domains/engine/holdout.ts: fits one power multiplier on training sample 
 Not yet executed: build, Vitest, Playwright Chromium PC/mobile/Firefox/WebKit; all IndexedDB save QA. No actual result numbers. Stage 0 NOT PASSED.
 GitHub connector has only PR-filtered run lookup by commit SHA; statuses [] are inconclusive. Obtain push-run ID and Actions job IDs from UI, fetch real logs, fix failures, rerun, document passing evidence. Next run also verify training/validation source conditions and quantitative results; do not present single power-scale as calibrated physics.
 Keep final checkbox multi-select and additional request input.
+
+## Operator action (2026-10-11)
+- Open Actions > CI > Run workflow on main and provide the run and test job URLs (instructions in docs/STAGE0_OPERATOR_RUNBOOK.md).
+- No job logs or actual passing build/Vitest/Playwright results obtained; Stage 0 remains NOT PASSED.
+- Training/holdout calibration has no executed result, and browser save QA remains unverified.
