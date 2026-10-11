@@ -248,3 +248,12 @@
 - Upon actual deployment the workflow should check hosted HTML/JavaScript and Chromium desktop/mobile gameplay & IndexedDB save/reload; not run yet. Browser emulation != real device.
 - New owner checklist: `docs/OWNER_PAGES_ACTIONS.md`. The Actions run URL after manual publication must be inspected to confirm release status before providing a playable link.
 - Docs-only commits are ignored by push CI; lack of commit status on a docs-only SHA is expected and **does not invalidate** the green code-changing SHA.
+
+
+## 2026-10-11 — exact-release Pages gate and current publish status
+- GitHub repo `CeLiCa-Sun/JAPAN-AUTO-TYCOON` is **public**. A direct site access test was not successful; **no actual Pages site/playing URL is verified**. GitHub Actions runs collection returned **no new `Publish playable preview` dispatch** after previous failing `38114576750`, whose `actions/configure-pages` step failed HTTP 404: Pages not configured.
+- Current owner-required action: `Settings > Pages > Build and deployment > Source: GitHub Actions`, then manually `Actions > Publish playable preview > Run workflow (main)`. The connected GitHub connector can read runs but cannot change Pages settings or initiate workflow_dispatch.
+- Release gating improvement in this stage: `scripts/stamp-pages-release.mjs` injects full 40-character `GITHUB_SHA` as HTML meta `jat-release-sha` only after Pages-mode build. CI validates the locally built stamp, Pages publish validates the same stamp on the **actual hosted HTML** before treating the release as fresh, and `tests-live/pages-playable.spec.ts` verifies the live version matches `PLAYWRIGHT_LIVE_SHA` before PC/mobile emulated gameplay and save/reload.
+- Other existing browser E2E: Chromium desktop/mobile + Firefox + WebKit via CI; Vitest + npm audit moderate+ blocking. The latest exact new code SHA must have its own passing CI to qualify. **Stamped release + live gameplay tests have NOT been executed on a public site**.
+- GitHub Actions latest inspected collection initially showed new build runs pending for `24762091`, `679a52a4`, `7706ff47`, `8ff9cfc`, with the last confirmed prior run `38116832464` for `defb4969` reporting success. Do not mark pending runs passed until their job conclusions and logs are verified.
+- Status contract: report old successful CI at its SHA separately from new SHA tests; do not share any guessed Pages URL.
