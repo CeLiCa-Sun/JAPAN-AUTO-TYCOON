@@ -1,4 +1,4 @@
-name: Publish playable preview (manual)
+name: Publish playable preview
 
 # One-time owner-requested publish attempt on this workflow change; ordinary commits do NOT redeploy.
 on:
@@ -78,7 +78,7 @@ jobs:
           grep -q 'JAPAN AUTO TYCOON' /tmp/jat-public-index.html
           script="$(grep -o 'src="/JAPAN-AUTO-TYCOON/assets/[^"]*"' /tmp/jat-public-index.html | head -1 | cut -d'"' -f2)"
           test -n "$script"
-          host="$(printf '%s' "$url" | sed -E 's#^(https?://[^/]+)/.*#\\1#')"
+          host="${url%%/JAPAN-AUTO-TYCOON/*}"
           curl --fail --location --retry 8 --retry-delay 4 --retry-all-errors "${host}${script}" -o /tmp/jat-public-app.js
           test -s /tmp/jat-public-app.js
       - name: Record verified live Pages link
