@@ -16,6 +16,9 @@ jobs:
           node-version: '22'
       - name: Install dependencies
         run: npm install
+      - name: Audit dependency vulnerabilities (report only)
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
       - name: Build TypeScript and Vite
         run: npm run build
       - name: Unit tests
