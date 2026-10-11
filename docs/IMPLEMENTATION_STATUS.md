@@ -1,6 +1,5 @@
 # IMPLEMENTATION STATUS — 2026-10-11
-- Stage 0 gate: NOT PASSED / no passing CI build, Vitest or Playwright proof.
-- Save: 3-generation SHA-256 IndexedDB and corruption/quota/legacy/abort/factory restore tests committed; no verified browser execution.
-- Engine thermal: total rejected heat distinguished from presumed coolant heat fraction; uncalibrated heuristic and new tests authored, NOT executed.
-- Engineering: combustion, knock and durability remain provisional; empirical full RPM dyno calibration absent.
-- Manufacturing: opt-in factory demo stores work orders/inventory/ledger, but real factory capacity/procurement not integrated.
+- Stage 0 quality gate: NOT PASSED. Build, Vitest, E2E success proof unavailable.
+- Save QA: source implementation and tests cover checksum, 3-generation backups, corruption, legacy, quota injection, abort, factory save/recovery; no cross-browser executed results.
+- Engine R&D: preliminary heat/knock/friction/reliability and new bounded deterministic research-points evaluator. All uncalibrated previews; real dyno validation absent.
+- Manufacturing: persisted opt-in factory demo with inventory/ledger and BOM helper; procurement and actual manufacturing economy unfinished.
