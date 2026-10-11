@@ -4,7 +4,8 @@ export interface CalibrationSummary {count:number;meanAbsolutePercentageError:nu
 export function evaluateCalibration(base:EngineDesign,data:readonly MeasuredPoint[]):CalibrationSummary{
  if(data.length<3)throw new Error("At least three measured points required");
  const points=data.map(p=>{
-  if(!Number.isFinite(p.rpm)||!Number.isFinite(p.powerKw)||p.powerKw<=0||!p.source.trim())throw new RangeError("Invalid measured point");
+  if(!Number.isFinite(p.rpm)||p.rpm<500||p.rpm>9000||!Number.isFinite(p.powerKw)||p.powerKw<=0||typeof p.source!=="string"||!p.source.trim()||p.torqueNm!==undefined&&(!Number.isFinite(p.torqueNm)||p.torqueNm<=0))throw new RangeError("Invalid measured point");
+  if(p.torqueNm!==undefined){const derived=p.torqueNm*2*Math.PI*p.rpm/60000;if(Math.abs(derived-p.powerKw)/p.powerKw>0.05)throw new RangeError("Torque/power measurement inconsistency");}
   const predictedKw=calculateEngine({...base,rpm:p.rpm}).powerKw;
   const percentageError=100*(predictedKw-p.powerKw)/p.powerKw;
   return {rpm:p.rpm,observedKw:p.powerKw,predictedKw,percentageError};
