@@ -1,8 +1,11 @@
 name: Publish playable preview
 
-# Deployment is explicitly owner-initiated after Pages has been enabled in Settings.
-# The previous push-triggered release failed when the repository had no Pages site.
+# One-time owner-requested Phase 2 release: ONLY the explicit release commit
+# may deploy from push. Return to workflow_dispatch-only after verification.
 on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/publish-preview.yml']
   workflow_dispatch:
 
 permissions:
@@ -14,6 +17,7 @@ concurrency:
 
 jobs:
   verify-and-build:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.head_commit.message, 'release(phase2):')
     runs-on: ubuntu-latest
     timeout-minutes: 25
     permissions:
