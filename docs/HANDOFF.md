@@ -1,11 +1,11 @@
 # HANDOFF — 2026-10-11
-Repo CeLiCa-Sun/JAPAN-AUTO-TYCOON main.
-Latest scope A/B/C/D:
-- src/domains/engine/program.ts engine trial and unit manufacturing cost prototype
-- tests/engine-program.test.ts
-- docs/ENGINE_REFERENCE_DATA.md candidates and constraints
-- playwright.config.ts now includes Chromium desktop/mobile, Firefox desktop, WebKit desktop
-- .github/workflows/ci.yml installs three engines
-Execution not confirmed. Do not repeat committed changes or assert test passes.
-Actions connector currently supplies PR-filtered commit runs; to obtain push job logs, a concrete push workflow run/job ID must be located in GitHub Actions.
-Next: inspect actual push CI run logs; fix TS/Vitest/Playwright failures; run storage/recovery suites. Obtain matched dynamometer dataset (known engine geometry and conditions) before fitting models. Integrate engine test costs into journal and factories after validation.
+Repo CeLiCa-Sun/JAPAN-AUTO-TYCOON / main.
+Added src/domains/engine/settlement.ts and tests/engine-settlement.test.ts: prototype testing gates a limited cash/expense journal settlement; prevents duplicate settlement IDs and insufficient funds using existing reducer.
+This is NOT a finished factory production or inventory transaction lifecycle.
+Existing CI, storage E2E, calibration and engineering preview unchanged.
+Next:
+1. Obtain a concrete GitHub Actions main branch push CI run/job ID from Actions UI; then use connected job-log tools to inspect actual failures.
+2. Run all tests in CI and fix errors evidenced by output, especially browser and TypeScript checks.
+3. Validate storage all-platform tests including quota/error and legacy migration.
+4. Obtain properly documented real dyno curve and matching engine specification, then compare using calibration harness.
+5. Model true engine BOM, order, goods receipt and inventory ledger before declaring manufacturing integrated.
