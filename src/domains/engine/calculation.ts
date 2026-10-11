@@ -14,7 +14,13 @@ export function calculateEngine(d:EngineDesign):EngineResult{
  const displacementM3=displacementCc/1e6;
  const airKgSec=displacementM3*(rpm/120)*1.225*volumetricEfficiency;
  const fuelKgSec=airKgSec/airFuelRatio;
- const powerKw=fuelKgSec*fuelLowerHeatingValueMJkg*1000*thermalEfficiency;
+ // Uncalibrated preview modifiers; not a dyno prediction.
+ const compressionGain=Math.max(0.75,Math.min(1.15,1+0.018*(compressionRatio-8)));
+ const pumpingFactor=Math.max(0.70,1-0.00000025*Math.pow(rpm-3500,2));
+ const frictionLossKw=0.000008*displacementCc*rpm/1000;
+ const knockIndex=Math.max(0,(compressionRatio-10)/8)*Math.max(0,(airFuelRatio-14.7)/8);
+ const knockDerate=Math.max(0.75,1-0.12*knockIndex);
+ const powerKw=Math.max(0.001,fuelKgSec*fuelLowerHeatingValueMJkg*1000*thermalEfficiency*compressionGain*pumpingFactor*knockDerate-frictionLossKw);
  const torqueNm=powerKw*1000/(2*Math.PI*rpm/60);
  return {displacementCc,meanPistonSpeedMs,torqueNm,powerKw,powerPs:powerKw/0.73549875,fuelKgHour:fuelKgSec*3600,bsfcGkwh:fuelKgSec*3600*1000/powerKw,modelVersion:ENGINE_MODEL_VERSION,quality:"theoretical+estimated"};
 }
