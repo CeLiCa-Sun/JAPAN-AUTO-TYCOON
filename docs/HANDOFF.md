@@ -46,3 +46,11 @@ Continue to show multi-select checkboxes and additional-request textarea.
 - IMPORTANT ACCOUNTING LIMITATION: existing manufactureEngines currently debits inventory and credits cash for the *entire production cost* even if procurement has already recognized raw-material inventory and payable; these workflows must not yet be combined as a finalized material-to-WIP-to-finished-goods ledger. Avoid double-counting claims.
 - Purchase order records are not persisted as part of GameState, and no factory capacity, partial delivery, supplier payment or UI integration is present. These are remaining required Phase 1 work.
 - Stage boundary CI policy remains: no per-commit requests; run one consolidated build/Vitest/Playwright/npm-audit verification after a completed phase. Current post-Stage-0 changes have NOT been CI verified.
+
+## Phase 1 cost-integrity guard (2026-10-11)
+- Repo baseline head inspected 1b8d26e96394bb86ac8af9baf2c3c889cc04672a.
+- src/domains/engine/persistentProduction.ts now explicitly rejects a manufacturing order if journals contain `purchase:` receipts. Rationale: GameState has no per-part procurement cost lot tracking and only one aggregated inventory ledger account; blindly integrating procurement and manufacture would double-count or misvalue raw materials. This is a fail-closed safeguard, NOT full raw→WIP→finished-goods accounting integration.
+- Added tests/persistent-production.test.ts regression ensuring procured materials are rejected rather than duplicating inventory, with no state mutation. NOT EXECUTED yet.
+- Existing manufacturing demo continues for non-procurement seeded materials.
+- Open work: persist purchase orders and suppliers; implement lot-level quantities/values, raw/WIP/finished-goods subledger and balanced transfer journal, partial receipt, capacity, depreciation, payment, source-matched engine calibration, and npm audit remediation.
+- Stage 0 historically PASS (CI run 38110349471, Playwright 56/56). Current head UNVERIFIED. User CI cadence: check only at phase completion, not each commit.
