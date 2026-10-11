@@ -55,7 +55,9 @@ jobs:
           npm ls vite vitest @vitest/mocker
           npm audit --audit-level=moderate
       - name: Build for GitHub Pages repository path
-        run: npm run build -- --mode pages
+        run: |
+          npm run build -- --mode pages
+          node scripts/stamp-pages-release.mjs "$GITHUB_SHA"
       - name: Unit tests
         run: npm test
       - name: Install Playwright browsers
@@ -116,6 +118,7 @@ jobs:
           echo "Checking published Pages response: $url"
           curl --fail --location --retry 8 --retry-delay 4 --retry-all-errors "$url" -o /tmp/jat-public-index.html
           grep -q 'JAPAN AUTO TYCOON' /tmp/jat-public-index.html
+          grep -Fq "name=\"jat-release-sha\" content=\"${GITHUB_SHA}\"" /tmp/jat-public-index.html
           script="$(grep -o 'src="/JAPAN-AUTO-TYCOON/assets/[^"]*"' /tmp/jat-public-index.html | head -1 | cut -d'"' -f2)"
           test -n "$script"
           host="${url%%/JAPAN-AUTO-TYCOON/*}"
@@ -124,6 +127,7 @@ jobs:
       - name: Check live PC/mobile gameplay and IndexedDB save recovery
         env:
           PLAYWRIGHT_LIVE_URL: ${{ steps.deployment.outputs.page_url }}
+          PLAYWRIGHT_LIVE_SHA: ${{ github.sha }}
         run: |
           npm ci
           npx playwright install --with-deps chromium
