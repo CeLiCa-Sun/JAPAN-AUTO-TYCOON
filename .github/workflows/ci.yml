@@ -17,8 +17,17 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Audit dependency vulnerabilities (report only)
-        run: npm audit --audit-level=moderate
+        run: |
+          npm audit --json > npm-audit.json || true
+          node -e 'const fs=require("fs");try{const a=JSON.parse(fs.readFileSync("npm-audit.json","utf8"));for(const [name,v] of Object.entries(a.vulnerabilities||{})){console.log(name+" severity="+v.severity+" range="+v.range+" fix="+JSON.stringify(v.fixAvailable))}console.log("audit-counts",JSON.stringify(a.metadata?.vulnerabilities||{}));}catch(e){console.log("Audit report unavailable:",String(e));}'
         continue-on-error: true
+      - name: Upload dependency audit details
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-details
+          path: npm-audit.json
+          if-no-files-found: ignore
       - name: Build TypeScript and Vite
         run: npm run build
       - name: Unit tests
