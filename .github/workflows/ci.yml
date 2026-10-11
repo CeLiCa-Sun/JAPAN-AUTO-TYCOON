@@ -42,6 +42,15 @@ jobs:
       - name: Dependency vulnerability gate (moderate and higher)
         if: always()
         run: npm audit --audit-level=moderate
+      - name: Upload Playwright artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-diagnostics
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
       - name: Publish phase CI status for SHA-based verification
         if: always() && github.event_name == 'push'
         continue-on-error: true
@@ -57,12 +66,3 @@ jobs:
               description: 'Build, Vitest, four-browser E2E, moderate+ npm audit',
               target_url: 'https://github.com/' + context.repo.owner + '/' + context.repo.repo + '/actions/runs/' + context.runId
             });
-      - name: Upload Playwright artifacts on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-diagnostics
-          path: |
-            playwright-report/
-            test-results/
-          if-no-files-found: ignore
