@@ -13,5 +13,5 @@ export interface DomainEvent { id: ID; kind: "MonthAdvanced" | "JournalPosted"; 
 export type GameCommand =
   | { id: ID; kind: "AdvanceMonth" }
   | { id: ID; kind: "PostJournal"; journal: JournalTransaction };
-export function yearMonth(c: GameCalendar): YearMonth { return `${c.year}-${String(c.month).padStart(2,"0")}`; }
+export function yearMonth(c: GameCalendar): YearMonth { return `${c.year}-${String(c.month).padStart(2,"0")}` as YearMonth; }
 export function initialState(name = "日本自動車工業"): GameState { return { schemaVersion: 1, calendar: {year:1950,month:1}, seed:195001, companies:[{id:"player",name,founded:"1950-01"}], journals:[], completedCommandIds:[], revision:0 }; }
