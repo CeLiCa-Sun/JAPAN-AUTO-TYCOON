@@ -240,3 +240,6 @@
 - User/admin action: `Settings > Pages > Build and deployment > Source: GitHub Actions`. Confirm plan permits Pages from a private repository, then `Actions > Publish playable preview > Run workflow`. Do not change repository visibility or claim a live URL before the real site works.
 - CI rerun: new code push will normally enter the standard CI workflow (build, 86+ cases, browser matrix, audit), but the **new HEAD's status is unknown until matching SHA-specific status/logs confirm results**. A past CI PASS must not be reused for the new release-only files and changed workflow.
 - Outstanding live acceptance: publication configuration, manually triggered Pages workflow, real deployment URL, live desktop/mobile (emulated) gameplay/reload PASS and optional physical-device manual verification.
+
+### Live verification workflow correction
+- After adding post-deployment Playwright tests, the separate `publish` runner needed its own checkout and Node 22 setup (jobs do not share workspace). Commit `ea57e9b37fbe0098839d83c7661cf465077d4447` adds `contents:read`, `actions/checkout@v4`, and `actions/setup-node@v4` to `publish` before the existing Pages and live-test steps. The new workflow and hosted tests are **not verified by a completed release run**; Pages configuration still blocks actual deployment.
