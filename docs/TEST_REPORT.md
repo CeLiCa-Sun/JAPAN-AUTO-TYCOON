@@ -1,13 +1,15 @@
 # TEST REPORT — 2026-10-11
-## Verified connector activity
-- Prior GitHub main head e169f973 inspected; engine research source and tests committed.
-- No GitHub Actions push job ID or job logs accessed. Existing commit workflow lookup is PR-only; empty result does not prove CI success or failure.
+## GitHub evidence
+- Inspected prior main head 6b5330d35bdcbf646b01f5b465161adb181640c4 and source.
+- Updated engine research wording so model-derived power is estimatedPowerKw (not measured).
+- Added input integrity validation for RPM domain (500–9000), torque/power arithmetic consistency (5% tolerance) and calibration regression tests.
 ## Execution evidence
-- TypeScript/Vite build: NOT EXECUTED.
-- Vitest tests: NOT EXECUTED.
-- Chromium desktop/mobile, Firefox and WebKit Playwright E2E: NOT EXECUTED.
-- IndexedDB quota, corruption, 3-generation recovery, aborted transaction, legacy, factory snapshot recovery: test sources exist but browser results NOT OBSERVED.
-## New engineering tests
-- Deterministic research preview, minimum trial duration, explicitly uncalibrated status and invalid funding tests committed. NOT EXECUTED.
-## Stage 0 quality gate
-NOT PASSED. Test definitions and commits are not evidence of passing test runs; concrete run/job logs and pass counts required.
+- Actual GitHub Actions push job logs: NOT obtained. Available run-by-commit lookup is PR-only, and job log retrieval requires a known job ID.
+- TypeScript/Vite build: NOT executed or verified.
+- Vitest: NOT executed or verified.
+- Playwright Chromium desktop/mobile, Firefox, WebKit: NOT executed or verified.
+- IndexedDB 3-generation, corruption, capacity simulation, legacy import, transaction abort, factory restore: source tests exist but NO verified runs.
+## Gate decision
+Stage 0 remains NOT PASSED. Never infer CI success from committed test cases.
+## Engineering warning
+The measurement integrity checks enforce internal algebra only and DO NOT validate sensor data, engine assumptions or real dyno calibration.
