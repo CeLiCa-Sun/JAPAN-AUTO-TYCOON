@@ -16,6 +16,11 @@ export function validateGameState(value: unknown): asserts value is GameState {
   if(!p||!Array.isArray(p.materials)||!Array.isArray(p.completedOrders))throw new Error("Invalid production state");
   const keys=new Set<string>();
   for(const m of p.materials){if(!m||typeof m.partId!=="string"||!m.partId||!Number.isSafeInteger(m.quantity)||m.quantity<0||keys.has(m.partId))throw new Error("Invalid inventory");keys.add(m.partId);}
+  if(p.costLots!==undefined){
+   if(!Array.isArray(p.costLots))throw new Error("Invalid cost lots");
+   const receiptIds=new Set<string>();
+   for(const lot of p.costLots){if(!lot||typeof lot.receiptId!=="string"||!lot.receiptId||receiptIds.has(lot.receiptId)||typeof lot.partId!=="string"||!lot.partId||!Number.isSafeInteger(lot.quantity)||lot.quantity<0||!Number.isSafeInteger(lot.unitCostYen)||lot.unitCostYen<=0||!Number.isSafeInteger(lot.quantity*lot.unitCostYen))throw new Error("Invalid cost lot");receiptIds.add(lot.receiptId);}
+  }
   const ids=new Set<string>();
   for(const o of p.completedOrders){if(!o||typeof o.orderId!=="string"||!o.orderId||ids.has(o.orderId)||typeof o.programId!=="string"||!o.programId||![o.accepted,o.rejected,o.totalCostYen].every(x=>Number.isSafeInteger(x)&&x>=0))throw new Error("Invalid production order");ids.add(o.orderId);}
  }
