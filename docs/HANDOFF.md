@@ -1,13 +1,18 @@
 # HANDOFF — 2026-10-11
-Repo: CeLiCa-Sun/JAPAN-AUTO-TYCOON; branch main. Source: user-provided JAPAN AUTO TYCOON specification Ver.1.0.
-## Last session
-GitHub commits include finance reports, engineering preview, monthly phase scheduler, rolling one-previous backup/JSON interchange, responsive dashboard, Vitest/Playwright tests, CI steps.
-Files: src/domains/finance/reports.ts, src/domains/engine/calculation.ts, src/core/monthly.ts, src/storage/backup.ts, src/app/Dashboard.tsx, src/main.tsx, e2e/smoke.spec.ts.
-## Required next checks
-1. Execute npm install, npm run build, npm test, npm run test:e2e on runner. Fix any compiler/test failures based on logs.
-2. Verify actions UI run and save/restore on real Chromium and mobile viewport.
-3. Improve transactional save with checksums and generations, schema migration and checksum verification.
-4. Integrate month-phase handlers and stop-on-event to real game commands.
-5. Extend finance to bank loans, bills and settlement lifecycle with canonical event IDs; improve UI.
-6. Stage 1 tune engineering model against reference engines and add UI-controlled parameters.
-Do not mark unverified code complete. Preserve compatibility of schemaVersion 1 and current saved game files.
+Repo: CeLiCa-Sun/JAPAN-AUTO-TYCOON / main.
+Input specification: JAPAN AUTO TYCOON Ver.1.0 (user upload).
+## Committed this turn
+- src/domains/engine/curve.ts: heuristic breathing curve.
+- src/app/EngineDesigner.tsx: editable engine preview/RPM SVG graph.
+- src/domains/finance/advanced.ts: loan origination, monthly interest estimate, depreciation journal, simplified P/L-B/S.
+- src/core/types.ts and finance/ledger.ts, finance/reports.ts: extend supported accounts.
+- src/storage/generations.ts: three generation rolling read/write scheme.
+- src/main.tsx and src/style.css: new UI and storage connection.
+- tests/advanced.test.ts and tests/longrun.test.ts: engineering/accounting and 1200-month calendar smoke.
+## Do next, in order
+1. Run npm install, npm run build, npm test and npm run test:e2e in actual runner; fix compiler/runtime errors. Only then mark gates verified.
+2. Strengthen backup with atomic generation writes, checksum envelopes, corruption tests and version migrations.
+3. Finance complete loan repayment/interest settlement, depreciation schedules, fixed asset purchase, genuine three-statement accounting and actual cash flow classification.
+4. Calibrate RPM performance against measured reference engines; model compression ratio, thermal/friction/knock/heat and give uncertainty bounds.
+5. Convert calendar-only 1200 month smoke to production simulation with actual factories/NPCs/markets.
+Avoid presenting existing placeholder UI as finished game; maintain prior save format support.
