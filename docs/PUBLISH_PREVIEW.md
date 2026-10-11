@@ -1,39 +1,31 @@
-# Public playable preview — controlled GitHub Pages release
+# JAPAN AUTO TYCOON — public playable preview release
 
-Status: **Prepared, not deployed.** No validated public playable URL as of 2026-10-11.
+**Status (2026-10-11):** Pages publication attempt prepared and triggered by a workflow change; **no verified live URL until the Pages status and public asset smoke pass**. Never guess a URL.
 
-## Eligibility and exposure
-- Repository `CeLiCa-Sun/JAPAN-AUTO-TYCOON` is **private** at the latest inspection.
-- GitHub Pages support for private repositories depends on the repository owner's GitHub plan (Pro/Team/Enterprise support private repositories; GitHub Free generally requires a public repository). Do **not** change repository visibility without an explicit decision.
-- Pages sites may be publicly visible even when their source repository is private. A static web game includes its client-side JavaScript in the public assets. Review assets for private information and secrets before release.
-- The deployment workflow is **manual-only**, with no automatic deployment on GitHub push or PR.
+## Verified release prerequisites
 
-## Preparation
-1. In GitHub repository `Settings > Pages > Build and deployment`, select `GitHub Actions` as the source. Make sure the account is eligible to publish Pages from this private repository.
-2. Finish the current milestone's CI: TypeScript/Vite, Vitest, Chromium desktop/mobile, Firefox, WebKit.
-3. Examine the full `npm-audit-details` artifact from the test workflow. Remediate vulnerabilities before first public release.
-4. The release workflow `.github/workflows/publish-preview.yml` intentionally blocks deployment on **moderate, high or critical** npm advisories. The full audit must pass at the moderate threshold before publication; audit success is not a substitute for code review.
-5. From the GitHub `Actions` tab, select **Publish playable preview (manual)**, then explicitly use **Run workflow** on `main`. Verify that both `verify-and-build` and `publish` jobs succeed.
-6. Obtain the real website link **from the `publish` job's `github-pages` deployment URL** or from `Settings > Pages > Visit site`. Do not guess a link or call the site live before this succeeds.
+- Repository is private. Pages eligibility and source settings are account-dependent. Publishing a Pages site normally exposes static JS/CSS even while its source repository is private. Do not change repository visibility without explicit user approval.
+- CI run https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38114198670 tested 1b961344: build PASS, Vitest **86/86**, four-browser E2E **76/76**, npm audit **0 vulnerabilities**.
+- CI run https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38114258320 tested b6538e2b: all test, install and audit gates SUCCESS; the job committed actual tested `package-lock.json` (commit **237f3400fd4f3b8f4da84b4f93d154c2768679a3**) on `main`. Lockfile version 3, 149 packages, Vite 7.3.7, Vitest 4.1.11.
+- This evidence is for the exact source SHAs above; newer docs/workflow commits still require their own CI record.
 
-## Build details
-- `vite.config.ts` uses `base: "/JAPAN-AUTO-TYCOON/"` in **pages** mode only; development, CI and local tests use `base: "/"`.
-- Release workflow installs Node 22 dependencies, runs blocking `npm audit --audit-level=moderate`, builds via `npm run build -- --mode pages`, executes all unit tests and the four-project Playwright suite, checks `dist`, uploads only the `dist` artifact, and deploys with least-privilege Pages permissions.
-- The existing CI workflow still captures complete audit JSON and logs severity/range/fix availability without declaring vulnerabilities fixed.
-- `package-lock.json` is **not currently committed**. A reviewed, reproducible lockfile and `npm ci` conversion are recommended as a subsequent dependency-quality checkpoint, but do not invent dependency resolutions.
+## How publication works
 
-## Acceptance
-- [ ] Newest commit's CI reports real build, Vitest and complete four-project E2E PASS.
-- [ ] npm advisories inspected and remediated as required for release.
-- [ ] Pages repository settings and owner plan confirm eligibility.
-- [ ] Manual Pages workflow succeeds on the intended commit.
-- [ ] Live browser smoke test verifies script loading, gameplay operations and save/reload.
-- [ ] Only then share the published URL.
+1. `.github/workflows/publish-preview.yml` runs once when that workflow file changes on main (explicit release attempt), and may also be invoked manually with `Actions > Publish playable preview > Run workflow`. Ordinary source or documentation commits **do not** deploy automatically.
+2. The release job requires **committed** `package-lock.json` and runs `npm ci`, blocking `npm audit --audit-level=moderate`, Pages-mode Vite build, Vitest, four-browser Playwright, and `dist` assertions.
+3. The Pages deployment step requires GitHub Pages configuration in **Settings > Pages > Build and deployment > Source: GitHub Actions**, and a plan eligible to host Pages from a private repository. The owner must enable these settings if not already configured.
+4. After deployment, Actions checks the live HTML title and fetches the live JavaScript asset. Its `JAPAN AUTO TYCOON / Pages` SHA status links to the actual published URL **only if deployment and those live network checks succeed**. Otherwise it reports failure and links to the Actions run.
+5. This is a network smoke test, not a physical PC/mobile device test of the published URL. The local-build E2E matrix covers Chromium desktop/mobile, Firefox and WebKit. Direct live site gameplay/save/reload still needs verification before calling the release fully checked.
 
-References: https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site and https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
+## If publishing fails
+- A missing private-repository Pages entitlement or missing Pages source setting must be resolved by the repository owner, without changing repository visibility automatically.
+- Check the exact `Publish playable preview` run and the `JAPAN AUTO TYCOON / Pages` commit status. Do not infer availability from a successful build alone.
+- Keep npm audit at the moderate threshold and do not bypass CI checks to publish.
+- There is **no valid shareable game URL** until the site and primary asset are actually reachable.
 
-## 2026-10-11 hardening update
-- Updated dependency floors to Vite `^7.3.7` and Vitest `^4.1.11` using published security advisories; not yet verified via resolved npm audit or current Actions run.
-- The CI workflow now emits a commit SHA-scoped `JAPAN AUTO TYCOON / CI` status after all quality and audit steps on push; use that plus the actual Actions job logs to verify a release. A missing status is not a pass.
-- Pages deployment has not occurred. Private repository visibility, plan eligibility, Pages source setting and explicit manual workflow dispatch still require the owner's action. Never invent a gameplay URL.
-- Details: `docs/SECURITY_AUDIT.md`.
+## Local play
+```bash
+npm ci
+npm run dev
+```
+See `docs/PLAYABLE_PROTOTYPE.md` for gameplay controls and known limitations.
