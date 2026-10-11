@@ -23,7 +23,9 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Block publication if high or critical advisories are present
-        run: npm audit --audit-level=high
+        run: |
+          npm ls vite vitest @vitest/mocker
+          npm audit --audit-level=moderate
       - name: Build for GitHub Pages repository path
         run: npm run build -- --mode pages
       - name: Unit tests
