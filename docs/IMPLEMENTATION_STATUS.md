@@ -1,10 +1,9 @@
 # Implementation status — 2026-10-11
-Categories: 未着手 / 設計済み / 実装中 / 仮実装 / 実装済み・未検証 / テスト失敗 / 検証済み.
-- Stage 0 React/Vite/TS: 実装済み・未検証.
-- Vitest tests: 作成済み・実行未確認.
-- Chromium desktop/mobile Playwright smoke and save corruption recovery tests: 作成済み・実行未確認.
-- CI workflow: build/unit/E2E configured. Push run result cannot be confirmed via available PR-only workflow query; no successful outcome claimed.
-- IndexedDB SHA-256 3-generation atomic-save transaction: 仮実装・未検証. Valid older generations can be recovered past a corrupt primary; stale generations cleared on save. Abort/recovery still needs real browser tests.
-- Engine modeling and financial lifecycle: 仮実装・未検証.
-- 1200-month calendar smoke: 作成済み・未実行; full industrial/economic 100-year test remains 未実装.
-- Stage 0 quality gate: 未通過.
+Status labels: 未着手 / 設計済み / 実装中 / 仮実装 / 実装済み・未検証 / テスト失敗 / 検証済み.
+- Stage 0 TypeScript/Vite scaffolding: 実装済み・未検証
+- Vitest: テスト作成済み・実行未確認
+- Desktop/mobile Playwright: テスト作成済み・実行未確認
+- IndexedDB checksums, backup, recovery and migration: 仮実装; new migration/abort E2E cases created, 未実行
+- GitHub CI: workflow configured for push, PR and manual workflow_dispatch with failure artifact; passing run 未確認
+- Stage 0 quality gate: 未通過
+- Stages 1+: existing previews remain 仮実装 and 未検証
