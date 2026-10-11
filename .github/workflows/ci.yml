@@ -49,6 +49,24 @@ jobs:
         run: npm run build
       - name: Unit tests
         run: npm test
+      - name: Verify Pages-mode bundle and repository subpath
+        run: |
+          npm run build -- --mode pages
+          node --input-type=module <<'NODE'
+          import {readFileSync,statSync} from 'node:fs';
+          const html=readFileSync('dist/index.html','utf8');
+          const urls=[...html.matchAll(/(?:src|href)="(\/JAPAN-AUTO-TYCOON\/assets\/[^"]+)"/g)].map(m=>m[1]);
+          if(!urls.some(u=>u.endsWith('.js')))throw new Error('Missing Pages JavaScript asset');
+          for(const url of urls){
+            const relative=url.replace('/JAPAN-AUTO-TYCOON/','');
+            if(statSync('dist/'+relative).size===0)throw new Error('Missing or empty asset: '+relative);
+          }
+          console.log('Pages-mode bundle verified: '+urls.length+' local assets');
+          NODE
+      - name: Validate release-only live test discovery (no deployment)
+        env:
+          PLAYWRIGHT_LIVE_URL: https://example.invalid/JAPAN-AUTO-TYCOON/
+        run: npx playwright test --list --config=playwright.live.config.ts
       - name: Install Chromium
         run: npx playwright install --with-deps chromium firefox webkit
       - name: Chromium desktop/mobile and Firefox/WebKit E2E
