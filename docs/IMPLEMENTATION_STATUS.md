@@ -89,3 +89,26 @@
 - Playability scope excludes supplier markets, contracts and due-date aging, demand simulation, factory 18-stage actual time progression, competition, taxes, credit limits, price discovery and engineering fidelity. Current supplier demo is instant delivery and selling accepts a user-selected price; no demand or buyer AI.
 - Remaining minimum playable-acceptance work: prove install/build pass; investigate any test failures; verify UI loop and persistence in all four browser configurations, including collision behavior; ensure the old factory demo and storage tests regressions remain passing. Do not equate authored tests with successful runtime execution.
 - User CI preference: run/review CI once at phase boundary, not after every commit. The changes in this group are the phase boundary, so next step is one actual GitHub Actions run tied to final commit.
+
+## Minimal playable loop: UX + fictional demand milestone (2026-10-11)
+
+### GitHub changes (current stage, not yet verified by CI)
+- src/domains/market/engineMarket.ts: deterministic **fictional** price-sensitive demand, static competitor reference price, available units, monthly remaining buyers, sellable quantity, unsold units and estimated revenue.
+- src/domains/market/marketSales.ts and optional GameState.marketSales: market sales decrement that month's remaining buyer quota. A subsequent month gets a fresh fictional buyer pool. Domain sale always calls the existing balanced revenue/COGS transaction and validates persisted state. Old saves without marketSales still validate.
+- src/app/BusinessCyclePanel.tsx: onboarding play guidance, suggested next action, revenue/profit metrics, demand/unsold forecast, sale limited to simulated demand. Existing manual price setter and business-cycle actions preserved.
+- src/app/Dashboard.tsx: cash history from the last 12 actual journal transactions, not fabricated financial records.
+- src/main.tsx: accurately labels the market preview and unimplemented NPC/real economy features.
+- New tests: tests/market-demand.test.ts (price sensitivity/bounds), tests/market-monthly-sales.test.ts (monthly demand consumption and month rollover). Expanded e2e/business-cycle.spec.ts to assert guide, cash history and expensive-price unsold inventory.
+- docs/PLAYABLE_PROTOTYPE.md: browser play instructions, boundaries, acceptance checklist.
+- .github/workflows/ci.yml: `npm audit --json` emits per-package name/severity/range/fixAvailable to logs and uploads the npm-audit-details JSON artifact even when vulnerabilities exist. This step is intentionally report-only. **Package names are not yet observed, dependencies have not been upgraded, remediation unverified.**
+
+### Test evidence (do not confuse historical and latest)
+- Historical Stage 0 Actions run 38110349471 / job 114384424640: build PASS, Vitest PASS, 56/56 Playwright PASS on an **earlier SHA**.
+- Current phase: no SHA-specific Actions job log available to this session. Unit/E2E tests are authored but not executed or verified. GH connector returned no workflow runs for newest commit (its workflow search only covers PR-triggered runs) and combined status returned no checks. This is **unknown**, not PASS and not confirmed FAIL.
+- Stage boundary requires a **single** complete verification: TypeScript + Vite build, Vitest, Chromium desktop/mobile, Firefox, WebKit E2E, and npm audit detail. Do not repeatedly ask for CI after each individual commit.
+- Outstanding: real current CI failures if any; package-level npm advisories and compatible dependency fixes; demand balancing, competitor companies and real buyers, actual timed 18-step production, macroeconomics and extensive long-duration simulation. Market numbers are scenario assumptions, not empirical calibration.
+
+### Next actions
+1. Inspect one GitHub Actions test job for the final stage commit and fix **observed** build/Vitest/E2E failures, if any.
+2. Use the npm-audit-details artifact to identify exact advisory dependencies and safe semver-compatible updates; rerun all gates after an upgrade.
+3. Extend demand with independent NPC competitor balance and monthly accounting/aging, then test a full year of playable business cycles.
