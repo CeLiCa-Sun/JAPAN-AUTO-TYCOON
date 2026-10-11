@@ -17,7 +17,7 @@ test("new business cycle supports capital procurement production sales and payab
  await expect(panel.getByText(/買掛金を現金で支払いました/)).toBeVisible();
  await page.reload();
  await page.getByRole("button",{name:"読み込み",exact:true}).click();
- await expect(panel.getByText(/買掛金/)).toBeVisible();
+ await expect(panel.getByText("買掛金",{exact:true})).toBeVisible();
  await expect(panel.getByText("0基",{exact:true})).toBeVisible();
  await expect(page.getByText("年月：1950-01")).toBeVisible();
 });
