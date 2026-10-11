@@ -5,7 +5,7 @@ import {initialState,yearMonth} from "./core/types";
 import {saveWithBackup,loadWithRecovery,restoreBackup,exportSave,importSave} from "./storage/backup";
 import {Dashboard} from "./app/Dashboard";
 import {EngineDesigner} from "./app/EngineDesigner";
-import {saveGenerations,recoverGenerations} from "./storage/generations";
+import {saveAtomic,recoverAtomic} from "./storage/atomic";
 import "./style.css";
 function App(){
  const [game,setGame]=useState(()=>initialState());
@@ -16,8 +16,8 @@ function App(){
   setGame(n===1?dispatch(game,{id,kind:"AdvanceMonth"}).state:advanceMonths(game,n,id).state);
   setStatus(`${n}ヶ月進行しました（試作）`);
  }catch(e){setStatus(String(e));}};
- const save=async()=>{try{await saveGenerations(slot,game);setStatus("保存しました（前回データをバックアップ）");}catch(e){setStatus(String(e));}};
- const load=async()=>{try{const x=await recoverGenerations(slot);if(x.state)setGame(x.state);setStatus(x.generation===null?"保存データがありません":x.generation>0?"バックアップ世代 "+x.generation+" から読み込みました":"保存データを読み込みました");}catch(e){setStatus(String(e));}};
+ const save=async()=>{try{await saveAtomic(slot,game);setStatus("保存しました（前回データをバックアップ）");}catch(e){setStatus(String(e));}};
+ const load=async()=>{try{const x=await recoverAtomic(slot);if(x.state)setGame(x.state);setStatus(x.generation===null?"保存データがありません":x.generation>0?"バックアップ世代 "+x.generation+" から読み込みました":"保存データを読み込みました");}catch(e){setStatus(String(e));}};
  const restore=async()=>{try{const x=await restoreBackup(slot);setGame(x);setStatus("バックアップを読み込みました（保存は未実施）");}catch(e){setStatus(String(e));}};
  const exportJson=()=>{const blob=new Blob([exportSave(game)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="japan-auto-tycoon-save.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
  const importJson=async(file:File|null)=>{if(!file)return;try{setGame(importSave(await file.text()));setStatus("JSONを取り込みました（保存は未実施）");}catch(e){setStatus(String(e));}};
