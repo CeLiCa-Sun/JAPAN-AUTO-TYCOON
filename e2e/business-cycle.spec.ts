@@ -2,6 +2,8 @@ import {test,expect} from "@playwright/test";
 test("new business cycle supports capital procurement production sales and payable settlement",async({page})=>{
  await page.goto("/");
  const panel=page.getByRole("region",{name:"経営サイクル試作"});
+ await expect(panel.getByText("初回プレイガイド")).toBeVisible();
+ await expect(page.getByText("現金残高の推移（直近12仕訳）")).toBeVisible();
  await panel.getByRole("button",{name:"1. 新規経営デモ開始"}).click();
  await expect(panel.getByText(/経営デモを開始しました/)).toBeVisible();
  await panel.getByRole("button",{name:"2. 部品を発注・納入"}).click();
