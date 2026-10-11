@@ -22,3 +22,13 @@
 
 ## Stage 0
 **NOT PASSED** until the new committed SHA passes build, Vitest and the complete Playwright matrix in real Actions logs.
+
+## CI run 38109958842 (2026-10-11)
+- Job 114383289587 tested 57eefe6081e95273bd64bf853e8979f08dbff368.
+- Build PASS; Vitest PASS; Playwright 50 PASS / 6 FAIL (56 total).
+- Legacy migration timed out on 2 Chromium projects because test inspected IndexedDB without waiting for the save completion.
+- Deliberate IndexedDB transaction abort threw page.evaluate:null across 4 browsers because the test rejected the expected abort error event.
+- Fix to e2e/migration-and-abort.spec.ts committed as b2aa24f4c154c9833433b9ea837a207689f90d4a. No post-fix CI pass verified.
+- Stage 0 NOT PASSED; a new run for the corrected SHA is necessary.
+- npm install previously noted 1 moderate and 2 critical advisories; package identification requires npm audit, not yet obtained.
+- Robin EY20D still uses single-scalar preview calibration, not validated physical coefficients.
