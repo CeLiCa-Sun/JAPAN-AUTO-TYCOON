@@ -1,6 +1,6 @@
 import type {Account, JournalTransaction} from "../../core/types";
 import {validateJournal} from "./ledger";
-export const ACCOUNTS: Account[]=["cash","equity","revenue","expense","inventory","workInProgress","finishedGoods","receivable","payable","loan","fixedAsset","accumulatedDepreciation"];
+export const ACCOUNTS: Account[]=["cash","equity","revenue","expense","costOfGoodsSold","inventory","workInProgress","finishedGoods","receivable","payable","loan","fixedAsset","accumulatedDepreciation"];
 export interface TrialBalanceRow {account:Account; debit:number; credit:number; net:number}
 export function trialBalance(journals:JournalTransaction[],companyId:string):TrialBalanceRow[]{
   const amounts=new Map<Account,number>(ACCOUNTS.map(a=>[a,0]));
@@ -14,7 +14,7 @@ export interface FinanceSnapshot {cash:number;receivable:number;payable:number;i
 export function financialSnapshot(journals:JournalTransaction[],companyId:string):FinanceSnapshot{
  const rows=trialBalance(journals,companyId);
  const net=(a:Account)=>rows.find(r=>r.account===a)!.net;
- const revenue=-net("revenue"),expenses=net("expense");
+ const revenue=-net("revenue"),expenses=net("expense")+net("costOfGoodsSold");
  const sum=rows.reduce((n,r)=>n+r.net,0);
  return {cash:net("cash"),receivable:net("receivable"),payable:-net("payable"),inventory:net("inventory"),revenue,expenses,equity:-net("equity"),netIncome:revenue-expenses,balanced:sum===0};
 }
