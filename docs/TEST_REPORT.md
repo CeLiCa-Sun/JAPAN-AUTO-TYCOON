@@ -1,13 +1,15 @@
 # TEST REPORT — 2026-10-11
-## Confirmed GitHub operations
-- Inspected head 05cf3389682f35079ff6b8920eca83d2972599d0.
-- Combined commit statuses returned []; commit workflow lookup returned [] and is limited to PR-triggered runs. Neither verifies main push CI.
-- Updated src/storage/atomic.ts to accept historical raw slot:backup after valid modern generations fail.
-- Added e2e/legacy-backup.spec.ts for historical backup recovery and format-2 resave.
-## Test execution
-- Build: NOT RUN / no successful log.
-- Vitest: NOT RUN / no successful log.
-- Playwright Chromium desktop/mobile, Firefox, WebKit: NOT RUN / no successful log.
-- Storage corruption, 3-generation rotation, quota error injection, transaction abort, legacy backup migration, factory restore: test sources committed; browser runs NOT VERIFIED.
-## Stage 0 decision
-NOT PASSED. CI push run/job ID and actual logs still unavailable. Do not infer passing tests from code commits.
+## Confirmed GitHub changes
+- Inspected previous main head 3d5385ff25bcba426af7692ae2af18c2f9b40114.
+- Fix: IndexedDB read request errors in recoverAtomic are no longer swallowed as if the slot was empty. Corrupt contents still fall back through valid generations and legacy backup.
+- Added e2e/storage-read-error.spec.ts to simulate a read failure and assert visible error instead of an absent-save message.
+## CI lookup and actual execution
+- Combined commit statuses: [].
+- Commit workflow runs: [] from PR-filtered GitHub connector; push run details remain unknown.
+- Browser-accessible Actions page request failed; no actual Actions run/job logs obtained.
+- npm build: NOT RUN; Vitest: NOT RUN; Chromium desktop/mobile, Firefox, WebKit Playwright: NOT RUN.
+- Existing save corruption, 3-generation, quota, abort, legacy migration, production restoration tests remain unverified.
+## Stage 0 gate
+**NOT PASSED**. Green build, Vitest and cross-browser E2E evidence is mandatory. No green inference from successful GitHub commits.
+## Engine calibration
+No new confirmed empirical dynamometer evidence or tuning this turn. Existing heat, knock, friction and lifetime estimates are uncalibrated previews.
