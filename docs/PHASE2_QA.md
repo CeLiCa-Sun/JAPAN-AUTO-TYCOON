@@ -25,3 +25,9 @@ Date: 2026-10-11
 - Owner manually triggers `Publish playable preview` on `main`.
 - Job must validate deployed HTML release SHA and pass the real HTTPS Playwright desktop/mobile tests for business operations and save/reload.
 - Actual physical iPhone/Android testing is an additional separate check.
+
+## Subsequent Firefox race regression (verified, after the above checkpoint)
+- Run [38119188065](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38119188065), code SHA `c9e5a443598331e110f5e039a7a9a66d1dd56d91`: build, Vitest **88/88**, Pages build/test-discovery and npm audit 0 **PASS**. Browser E2E **83 passed, 2 FAILED, 3 skipped**; the only failures were `e2e/generations.spec.ts` and `e2e/storage.spec.ts`, both in Firefox.
+- The race arose when tests used a previous `自動保存済み` message as evidence a later month operation had finished, and when a manual Save could fire before the in-progress month save committed. The first could overwrite corrupted test fixtures after injection; the second produced an expected stale-revision conflict rather than the test's expected successful save.
+- Code fix `86fc73aaa04e82c55775997f0aec2a77c934ca8b`: display `月次進行を保存中…` and temporarily disable Save/Load/Backup/Import while a month advance is saving. Test fixes `6212de654752979c84501b7ede7dbb89bf6485f0` and `d09bf6c4a35d7b975d2ff66b77b5d4addff3aaf3`: await the actual month rendering before backup corruption and manual Save.
+- New matching CI run [38119375890](https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions/runs/38119375890) is **pending** at checkpoint. Do NOT claim full browser E2E success or redeploy based on the failed earlier run.
