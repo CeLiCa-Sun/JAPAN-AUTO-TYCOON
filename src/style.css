@@ -1,3 +1,29 @@
 :root{font-family:system-ui,sans-serif;color:#e7edf5;background:#0c1724}*{box-sizing:border-box}body{margin:0}.app{max-width:1100px;margin:auto;padding:18px}header{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #425368;padding:15px 0}small{color:#a7b5c7}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px;margin-top:24px}section{border:1px solid #35485d;border-radius:12px;padding:20px;background:#172638}h1{font-size:1.5rem}.actions{display:flex;flex-wrap:wrap;gap:9px}button{padding:12px;border:1px solid #668bb4;background:#2b5276;border-radius:8px;color:white;cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid #cbe3ff}input{max-width:100%;padding:10px;border:1px solid #668bb4;background:#071522;color:#fff;border-radius:6px}label{display:block;margin:10px 0}label input{display:block;margin:8px 0}.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.metric{border:1px solid #35485d;border-radius:8px;padding:12px;display:grid;gap:8px}.metric span{color:#a7b5c7}.metric strong{font-variant-numeric:tabular-nums}.bar{height:7px;background:#34465b;border-radius:5px;overflow:hidden}.bar span{display:block;background:#7cb9e8;height:100%}dl{display:grid;grid-template-columns:1fr 1fr;gap:10px}dd{margin:0;text-align:right}@media(max-width:600px){.app{padding:12px}header{flex-direction:column}button{min-height:44px}}
 
 .engine-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}.engine-controls input,.engine-controls select{width:100%;padding:9px;border-radius:6px;background:#0c1724;color:#fff;border:1px solid #668bb4}.rpm-chart{display:block;width:100%;max-height:220px;background:#101e2e;border-radius:8px}.chart-legend{font-size:.8rem;color:#bbc9db}.engine-workspace{grid-column:1/-1}
+
+/* Phase 2: touchscreen-first play loop without hiding any existing panels. */
+.quick-nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.quick-nav a{display:inline-flex;align-items:center;min-height:44px;padding:10px 14px;border:1px solid #668bb4;border-radius:9px;color:#e8f4ff;background:#20466c;text-decoration:none}
+.quick-nav a:hover,.quick-nav a:focus-visible{background:#2d628f;outline-color:#cbe3ff}
+#business-cycle{grid-column:1/-1;scroll-margin-top:12px;border-color:#6489ae}
+#save-manager{scroll-margin-top:12px}
+#business-cycle .actions button{min-height:48px;flex:1 1 165px}
+#business-cycle input[type="number"]{width:min(100%,320px);font-size:16px}
+#business-cycle .price-presets{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 16px}
+.price-presets>span{color:#c4d4e6}
+.price-presets button{min-height:44px;padding:9px 12px;white-space:nowrap}
+.price-presets button[aria-pressed="true"]{background:#497da7;border-color:#b9defa;box-shadow:inset 0 0 0 1px #cbe3ff}
+#business-cycle .play-progress{font-variant-numeric:tabular-nums}
+.save-hint{line-height:1.6;color:#c4d4e6}
+button:disabled{opacity:.54;cursor:not-allowed}
+@media(max-width:600px){
+ .app{padding:10px}
+ main{grid-template-columns:minmax(0,1fr);gap:12px;margin-top:14px}
+ section{padding:16px;min-width:0}
+ .quick-nav a{flex:1 1 140px;justify-content:center}
+ .metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .metric{padding:10px;min-width:0;overflow-wrap:anywhere}
+ #business-cycle .actions button{flex:1 1 100%}
+ .price-presets button{flex:1 1 90px}
+}
