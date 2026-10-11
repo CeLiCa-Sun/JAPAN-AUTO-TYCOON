@@ -54,3 +54,11 @@ Continue to show multi-select checkboxes and additional-request textarea.
 - Existing manufacturing demo continues for non-procurement seeded materials.
 - Open work: persist purchase orders and suppliers; implement lot-level quantities/values, raw/WIP/finished-goods subledger and balanced transfer journal, partial receipt, capacity, depreciation, payment, source-matched engine calibration, and npm audit remediation.
 - Stage 0 historically PASS (CI run 38110349471, Playwright 56/56). Current head UNVERIFIED. User CI cadence: check only at phase completion, not each commit.
+
+## Phase 1 integrated material costing — 2026-10-11
+- Historical Stage 0 CI PASS is run 38110349471 (build, Vitest, 56 E2E). Current revisions following that baseline have NOT been verified by CI; user specifies one CI run at completed stage boundary, not per commit.
+- Added Account entries workInProgress, finishedGoods, preserving original inventory as raw materials in the tracked path; ProductionState optional costLots carry receipt-id, part-id, quantity, purchase unit cost. Legacy save objects without costLots remain accepted.
+- Procurement receipt now adds a cost lot and posts raw inventory debit / payable credit. Tracked production consumes actual receipt cost FIFO per BOM requirement, credits raw inventory, debits WIP, credits WIP, debits finishedGoods; pays only incremental manufacturing overhead from cash. The journal is balanced without recognizing purchased raw cost twice. Legacy demo inventory/expense remains on its earlier standalone path.
+- Added tests/procurement-manufacturing-integrated.test.ts for end-to-end cost balance, remaining lot quantities, duplicate manufacturing and missing provenance. Tests authored, NOT EXECUTED, no new passing build evidence.
+- Current implementation is a narrow preview: purchase orders are not fully persisted; partial deliveries, supplier payment, facility capacity, salvage/waste accounting, detailed WIP timeline and finished-goods sale/cost-of-goods-sold require further work. Rejected-only tracked orders are blocked pending scrap expense logic. Browser save compatibility of new optional costLots must be tested.
+- Security: npm audit report-only CI step exists; package-level findings and remediation pending. EY20D physical engine model remains uncalibrated.
