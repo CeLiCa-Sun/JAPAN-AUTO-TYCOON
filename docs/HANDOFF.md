@@ -1,11 +1,14 @@
 # HANDOFF — 2026-10-11
-Repository: CeLiCa-Sun/JAPAN-AUTO-TYCOON; main branch.
-Current task: CI and storage QA.
-Changes: e2e/migration-and-abort.spec.ts adds legacy schema V1->envelope format 2 and IDB aborted transaction coverage; CI workflow now includes workflow_dispatch, named steps and diagnostic upload.
-Do NOT rerun the previously committed modifications absent evidence of a defect.
+Repository: CeLiCa-Sun/JAPAN-AUTO-TYCOON, main.
+Last round focused on A-D: attempted CI status retrieval; could NOT access push run IDs/job logs. Avoid claiming CI passed or failed.
+Committed:
+- src/domains/engine/reliability.ts: uncalibrated comparative thermal load, friction, knock index, piston stress, approximate life.
+- tests/reliability.test.ts: comparative invariants.
+- e2e/generations.spec.ts: 3-generation rotating restore, corruption of primary+first backup and second backup restoration.
+Prior test paths: e2e/storage.spec.ts, e2e/migration-and-abort.spec.ts, tests/core.test.ts, tests/advanced.test.ts, tests/longrun.test.ts.
 NEXT:
-1. Open GitHub Actions at https://github.com/CeLiCa-Sun/JAPAN-AUTO-TYCOON/actions ; select latest CI main run or run workflow manually.
-2. Obtain run ID/job log, inspect build/TS/Vitest/Playwright results, fix exact failures and re-run.
-3. Test browser save rotations, corrupted primary, migration, transaction abort on Chromium desktop/mobile.
-4. Record observed counts and exact commit SHA in TEST_REPORT.md. Do not mark tests verified until actual success evidence.
-All prior specs and schemaVersion 1 backward reading retained.
+1. Inspect GitHub Actions push CI runs from UI; get run/job ID and download actual failed job logs.
+2. Resolve build, Vitest, Playwright failures only from observed evidence. Re-run and record outcomes.
+3. Validate quota exceeded and transaction abort/failure isolation. Run E2E on desktop/mobile, then Firefox/WebKit.
+4. Calibrate engineering models from measured engine data and document uncertainty bands.
+Keep status labels honest and preserve all prior game scope.
