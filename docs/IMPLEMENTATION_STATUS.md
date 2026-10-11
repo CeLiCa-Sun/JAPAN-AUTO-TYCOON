@@ -1,5 +1,5 @@
 # IMPLEMENTATION STATUS — 2026-10-11
-- Stage 0 NOT PASSED: no real CI push run/job log, build, Vitest or Playwright pass confirmation.
-- Save: read failures no longer silently look like missing saves; added simulated IndexedDB read-error E2E test. Existing 3-generation, legacy backup, corruption/quota/abort factory recovery test sources are UNVERIFIED.
-- Engine engineering: research prototype and calibration harness exist but no new matched real measured RPM curve or empirically validated coefficients this turn.
-- Manufacturing: factory UI and persistent journal/stock demo remain prototype.
+- Stage 0: NOT PASSED. No authenticated Actions push-run logs or build/unit/E2E pass evidence.
+- Storage: 3 generation SHA-256 recovery, legacy fallback, quota/abort/corrupt/read-failure/factory test sources exist. Unverified in browsers.
+- Engine: added research thermal loss, assumed coolant demand, friction and exponential failure-risk estimate, with unit tests. Model explicitly uncalibrated; no real dyno fit.
+- Engine manufacturing/accounting: prior demo implementation remains provisional.
