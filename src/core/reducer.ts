@@ -1,6 +1,7 @@
 import type { DomainEvent, GameCommand, GameState } from "./types";
 import { yearMonth } from "./types";
 import { validateJournal } from "../domains/finance/ledger";
+import { validateGameState } from "./validation";
 import { nextRandom } from "./random";
 export interface DispatchResult { state: GameState; events: DomainEvent[] }
 export function dispatch(state: GameState, cmd: GameCommand): DispatchResult {
@@ -25,8 +26,15 @@ export function dispatch(state: GameState, cmd: GameCommand): DispatchResult {
   updated = {...updated, revision:state.revision+1, completedCommandIds:[...state.completedCommandIds,cmd.id]};
   return {state:updated,events:[event]};
 }
-export function advanceMonths(state: GameState, count: 3|6|12, prefix: string): DispatchResult {
+/** Computes on local immutable snapshots; throws without altering caller state. */
+export function advanceMonths(state: GameState, count: 3|6|12, prefix: string, shouldStop: (state: GameState, events: DomainEvent[]) => boolean = () => false): DispatchResult {
+  validateGameState(state);
+  if (!prefix) throw new Error("Batch prefix required");
   let current = state; const events: DomainEvent[] = [];
-  for(let i=0;i<count;i++){ const result=dispatch(current,{kind:"AdvanceMonth",id:`${prefix}:${i}`});current=result.state;events.push(...result.events); }
+  for(let i=0;i<count;i++){
+    const result=dispatch(current,{kind:"AdvanceMonth",id:`${prefix}:${i}`});
+    current=result.state;events.push(...result.events);
+    if (shouldStop(current,events)) break;
+  }
   return {state:current,events};
 }
