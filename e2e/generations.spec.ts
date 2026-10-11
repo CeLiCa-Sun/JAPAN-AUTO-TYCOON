@@ -1,20 +1,22 @@
 import {test,expect} from "@playwright/test";
 test("three rolling generations restore the most recent valid backup",async({page})=>{
  await page.goto("/");
- for(let i=0;i<4;i++){
-   await page.getByRole("button",{name:"保存",exact:true}).click();
-   await expect(page.getByRole("status")).toContainText("保存しました");
-   if(i<3)await page.getByRole("button",{name:"1ヶ月進行"}).click();
+ await page.getByRole("button",{name:"保存",exact:true}).click();
+ await expect(page.getByRole("status")).toContainText("保存しました");
+ for(let i=0;i<3;i++){
+   await page.getByRole("button",{name:"1ヶ月進行"}).click();
+   await expect(page.getByRole("status")).toContainText("自動保存済み");
  }
  await page.getByRole("button",{name:"バックアップ復元"}).click();
  await expect(page.getByText("年月：1950-03")).toBeVisible();
 });
 test("corrupt primary and generation 1 recover generation 2",async({page})=>{
  await page.goto("/");
- for(let i=0;i<3;i++){
-  if(i)await page.getByRole("button",{name:"1ヶ月進行"}).click();
-  await page.getByRole("button",{name:"保存",exact:true}).click();
-  await expect(page.getByRole("status")).toContainText("保存しました");
+ await page.getByRole("button",{name:"保存",exact:true}).click();
+ await expect(page.getByRole("status")).toContainText("保存しました");
+ for(let i=0;i<2;i++){
+  await page.getByRole("button",{name:"1ヶ月進行"}).click();
+  await expect(page.getByRole("status")).toContainText("自動保存済み");
  }
  await page.evaluate(async()=>new Promise<void>((resolve,reject)=>{
    const o=indexedDB.open("japan-auto-tycoon",1);o.onerror=()=>reject(o.error);
