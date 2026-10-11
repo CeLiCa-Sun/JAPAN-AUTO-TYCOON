@@ -1,6 +1,6 @@
 import type {Account, JournalTransaction} from "../../core/types";
 import {validateJournal} from "./ledger";
-export const ACCOUNTS: Account[]=["cash","equity","revenue","expense","inventory","receivable","payable","loan","fixedAsset","accumulatedDepreciation"];
+export const ACCOUNTS: Account[]=["cash","equity","revenue","expense","inventory","workInProgress","finishedGoods","receivable","payable","loan","fixedAsset","accumulatedDepreciation"];
 export interface TrialBalanceRow {account:Account; debit:number; credit:number; net:number}
 export function trialBalance(journals:JournalTransaction[],companyId:string):TrialBalanceRow[]{
   const amounts=new Map<Account,number>(ACCOUNTS.map(a=>[a,0]));
