@@ -19,7 +19,7 @@ export async function recoverAtomic(slot:string):Promise<{state:GameState|null;g
  return {state:null,generation:null,legacy:false};}finally{db.close();}
 }
 const pendingSaves=new Map<string,Promise<void>>();
-/** Serialize overlapping saves for a slot within this tab. Cross-tab coordination remains future work. */
+/** Serialize overlapping same-slot saves within a tab; Web Locks coordinate other tabs where available. */
 export function saveAtomic(slot:string,state:GameState):Promise<void>{
  const prior=pendingSaves.get(slot)??Promise.resolve();
  const queued=prior.catch(()=>undefined).then(async()=>{
@@ -38,6 +38,17 @@ export function saveAtomic(slot:string,state:GameState):Promise<void>{
 async function saveAtomicUnchecked(slot:string,state:GameState):Promise<void>{
  if(!slot.trim())throw new Error("Empty slot");const entry=await pack(state);const db=await open();
  try{
+ // Reject an older snapshot before rotating backups. The cross-tab Web Lock covers this check.
+ // Corrupt primary data is deliberately ignored so valid previous generations remain recoverable.
+ const primary=await getValue(db,key(slot,0));
+ if(primary!==undefined){
+  let committed:GameState|undefined;
+  try{committed=await unpack(primary);}catch{
+   try{validateGameState(primary);committed=primary;}catch{/* corrupted primary; recovery handled separately */}
+  }
+  if(committed&&(committed.revision>state.revision||(committed.revision===state.revision&&JSON.stringify(committed)!==JSON.stringify(state))))
+   throw new Error("Save conflict: stored revision differs; load latest save before overwriting");
+ }
  const previous:Envelope[]=[];
  for(let i=0;i<MAX-1;i++){const value=await getValue(db,key(slot,i));if(value===undefined)continue;try{previous.push(await pack(await unpack(value)));}catch{try{validateGameState(value);previous.push(await pack(value));}catch{continue;}}}
  await new Promise<void>((resolve,reject)=>{const tx=db.transaction(STORE,"readwrite");const store=tx.objectStore(STORE);store.put(entry,key(slot,0));previous.forEach((x,i)=>store.put(x,key(slot,i+1)));for(let i=previous.length+1;i<MAX;i++)store.delete(key(slot,i));tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);});
