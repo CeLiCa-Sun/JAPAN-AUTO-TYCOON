@@ -10,12 +10,12 @@ async function unpack(value:unknown):Promise<GameState>{if(!value||typeof value!
 function getValue(db:IDBDatabase,slot:string):Promise<unknown>{return new Promise((resolve,reject)=>{const tx=db.transaction(STORE,"readonly");const req=tx.objectStore(STORE).get(slot);req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});}
 export async function recoverAtomic(slot:string):Promise<{state:GameState|null;generation:number|null;legacy:boolean}>{
  if(!slot.trim())throw new Error("Empty slot");const db=await open();
- try{for(let i=0;i<MAX;i++){let value:unknown;try{value=await getValue(db,key(slot,i));}catch{continue;}if(value===undefined)continue;
+ try{for(let i=0;i<MAX;i++){const value=await getValue(db,key(slot,i));if(value===undefined)continue;
  try{const state=await unpack(value);return {state,generation:i,legacy:false};}
  catch{if(i===0){try{validateGameState(value);return {state:value,generation:0,legacy:true};}catch{/* try backup */}}}
  }
  // Older backup.ts stored an unwrapped backup at slot+":backup". Recover it only after modern generations fail.
- try{const prior=await getValue(db,slot+":backup");if(prior!==undefined){validateGameState(prior);return {state:prior,generation:MAX,legacy:true};}}catch{/* no valid old backup */}
+ const prior=await getValue(db,slot+":backup");if(prior!==undefined){try{validateGameState(prior);return {state:prior,generation:MAX,legacy:true};}catch{/* invalid legacy contents */}}
  return {state:null,generation:null,legacy:false};}finally{db.close();}
 }
 export async function saveAtomic(slot:string,state:GameState):Promise<void>{
