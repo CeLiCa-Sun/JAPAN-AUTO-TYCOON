@@ -4,11 +4,14 @@ import {calculateEngine,DEFAULT_ENGINE} from "../domains/engine/calculation";
 export function Dashboard({game}:{game:GameState}){
  const finance=financialSnapshot(game.journals,"player");
  const engine=calculateEngine(DEFAULT_ENGINE);
- const cashHistory=game.journals.reduce<{id:string;label:string;balance:number;change:number}[]>((rows,j)=>{
+ const cashHistory:{id:string;label:string;balance:number;change:number}[]=[];
+ let runningCash=0;
+ for(const j of game.journals){
   const change=j.entries.filter(e=>e.account==="cash").reduce((n,e)=>n+e.debit-e.credit,0);
-  const balance=(rows.length?rows[rows.length-1].balance:0)+change;
-  return [...rows,{id:j.id,label:j.description,balance,change}];
- },[]).slice(-12);
+  runningCash+=change;
+  cashHistory.push({id:j.id,label:j.description,balance:runningCash,change});
+  if(cashHistory.length>12)cashHistory.shift();
+ }
  const maxCash=Math.max(1,...cashHistory.map(row=>Math.abs(row.balance)));
  const cards=[["現金",finance.cash],["売掛金",finance.receivable],["買掛金",finance.payable],["売上",finance.revenue],["当期損益（累計）",finance.netIncome]];
  const max=Math.max(1,...cards.map(x=>Math.abs(x[1] as number)));
