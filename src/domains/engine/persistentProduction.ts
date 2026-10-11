@@ -19,6 +19,14 @@ export function manufactureEngines(state:GameState,program:EngineProgram,command
  if(procured){
   // Do not silently use free legacy stock as if purchased. FIFO based on verified receipts.
   if(!state.production?.costLots?.length)throw new Error("Procurement-to-production cost transfer requires inventory provenance");
+  // Every physical unit must have a matching valued receipt; never mix free demo stock.
+  for(const item of stock){
+   const valued=state.production.costLots.filter(l=>l.partId===item.partId).reduce((n,l)=>n+l.quantity,0);
+   if(!Number.isSafeInteger(valued)||valued!==item.quantity)throw new Error("Untracked material inventory provenance: "+item.partId);
+  }
+  for(const lot of state.production.costLots){
+   if(!stock.some(item=>item.partId===lot.partId))throw new Error("Orphan material cost lot: "+lot.partId);
+  }
   const lots=state.production.costLots.map(l=>({...l}));
   let materialValue=0;
   for(const req of plan.required){
