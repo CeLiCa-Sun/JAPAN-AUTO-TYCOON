@@ -19,6 +19,7 @@ jobs:
     permissions:
       contents: read
       pages: read
+      statuses: write
     steps:
       - name: Require GitHub Pages to be enabled from Actions
         uses: actions/github-script@v7
@@ -49,7 +50,7 @@ jobs:
           test -s package-lock.json
       - name: Install verified dependencies
         run: npm ci
-      - name: Block publication if high or critical advisories are present
+      - name: Block publication if moderate or higher advisories are present
         run: |
           npm ls vite vitest @vitest/mocker
           npm audit --audit-level=moderate
@@ -70,6 +71,20 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+      - name: Record preflight or test failure for Pages publication
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: 'failure',
+              context: 'JAPAN AUTO TYCOON / Pages',
+              description: 'Pages configuration, build, audit or browser gate failed',
+              target_url: 'https://github.com/' + context.repo.owner + '/' + context.repo.repo + '/actions/runs/' + context.runId
+            });
 
   publish:
     needs: verify-and-build
